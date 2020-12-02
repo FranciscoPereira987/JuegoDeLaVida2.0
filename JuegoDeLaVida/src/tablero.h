@@ -13,6 +13,16 @@
 #include "celula.h"
 #endif
 
+#ifndef NULL
+#define NULL 0
+#endif
+
+#ifndef STRING
+#define STRING
+#include <string>
+using std::string;
+#endif
+
 typedef unsigned int uint;
 
 /*
@@ -22,10 +32,10 @@ class Tablero{
 
 private:
 
-	uint filas;
-	uint columnas;
+	int filas;
+	int columnas;
 
-	Celula** juego;
+	Celula*** juego;
 
 	/*
 	 * Pre: El nrFila y el nrColumna debe ser
@@ -33,30 +43,60 @@ private:
 	 * Post: Se le agrega puntaje a las celulas
 	 * adyacentes
 	 */
-	void contarAdyacentes(uint nrFila, uint nrColumna);
+	void contarAdyacentes(int nrFila, int nrColumna);
+
+	/*
+	 * Pre: nrFila y nrColumna deben ser validos
+	 * y debe haber una celula viva en una posicion
+	 * adyacente
+	 * Post: Se crea una celula con puntaje uno si no
+	 * habia ninguna, caso contrario. Se le suma una vecina
+	 */
+	void contarVecina(int nrFila, int nrColumna);
 
 	/*
 	 * Post: Se libera la memoria de los punteros
 	 */
-	void limpiarPunteros();
+	void limpiarTablero();
 
 	/*
+	 * Pre: La fila debe ser valida
+	 * Post: Libera el espacio de esa fila
+	 */
+	void limpiarFila(int fila);
+
+	/*
+	 * pre: la fila y columna deben ser validas
+	 * ademas, debe haber una celula en ese lugar
 	 * Post: Se libera la memoria ocupada por las
 	 * celulas
 	 */
-	void limpiarCelulas();
+	void limpiarCelula(int fila, int columna);
 
 	/*
 	 * Post: Devuelve si la posicion pasada
 	 * como parametro es valida
 	 */
-	bool posicionValida(uint nrFila, uint nrColumna);
+	bool posicionValida(int nrFila, int nrColumna);
 
 	/*
-	 * Post: Devuelve los puntajes a cero y mata a
-	 * las celulas muertas
+	 * Post: Devuelve los puntajes a cero y mata celulas muertas
 	 */
 	void definirTablero();
+
+	/*
+	 * pre: nrFila y nrColumna deben ser validos
+	 * Post: Devuelve si en esa posicion del tablero hay una
+	 * celula y si la misma esta muerta
+	 */
+	bool celulaMuerta(int nrFila, int nrColumna);
+
+	/*
+	 * Post: inicializa todos los punteros a celula como NULL
+	 */
+	void inicializarFila(Celula**& fila);
+
+
 
 public:
 	/*
@@ -77,7 +117,7 @@ public:
 	 * post: Se agrega una celula viva en
 	 * esa posicion
 	 */
-	void agregarCelula(uint nrFila, uint nrColumna);
+	void agregarCelula(int nrFila, int nrColumna);
 
 	/*
 	 * Pre: ---
@@ -86,7 +126,10 @@ public:
 	 */
 	void actualizar();
 
-
+	/*
+	 * Post: imprime el tablero
+	 */
+	void imprimirTablero();
 
 };
 
