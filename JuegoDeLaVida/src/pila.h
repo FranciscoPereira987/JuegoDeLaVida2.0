@@ -90,7 +90,7 @@ Type Pila<Type>::pop(){
 		throw string("PILA VACIA");
 	}
 
-	Type valor = *(pila)[0];
+	Type valor = pila->operator [](0);
 
 	pila->remove(0);
 
@@ -107,7 +107,7 @@ void  Pila<Type>::apilar(Type valor){
 template <class Type>
 bool Pila<Type>::vacia(){
 
-	return pila->longitud();
+	return !(pila->longitud());
 }
 
 template <class Type>
