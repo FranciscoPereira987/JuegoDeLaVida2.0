@@ -40,7 +40,6 @@ void Celula::decidirEstado(){
 /*
  * Metodos privados
  */
-
 void Celula::resetearPuntaje(){
 	puntaje = 0;
 }

@@ -8,13 +8,24 @@
 #ifndef CELULA_H_
 #define CELULA_H_
 
+
+/*
+ * El enum Estado se usa para
+ * hacer referencia al estado de la celula
+ * dado que 0 = false y 1 = true
+ */
 enum Estado{
 	MUERTA = 0,
 	VIVA
 };
 
+
 /*
- *
+ *	La celula posee estado y puntaje
+ *	puntaje hace referencia a la cantidad de celulas
+ *	vivas adyacentes a la misma
+ *	para determinar el estado de la celula sigue las
+ *	reglas del juego de la vida
  */
 class Celula{
 

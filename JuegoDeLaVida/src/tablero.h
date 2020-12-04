@@ -26,7 +26,11 @@ using std::string;
 typedef unsigned int uint;
 
 /*
- *
+ * Matriz de punteros a Celulas
+ * Todos los punteros empiezan apuntando a NULL
+ * Solo se pueden agregar celulas dentro de los limites
+ * del Tablero [0-filas) o [0-columnas)
+ * Se actualiza segun las reglas de las celulas
  */
 class Tablero{
 
@@ -99,6 +103,7 @@ private:
 
 
 public:
+
 	/*
 	 * pre: cantFilas y cantColumnas deben ser
 	 * mayores a 0
