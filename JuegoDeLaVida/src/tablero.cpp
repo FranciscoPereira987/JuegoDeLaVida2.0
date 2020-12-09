@@ -7,29 +7,23 @@
 
 
 #include "tablero.h"
+#include "lista.h"
 #include <iostream>
+#include <fstream>
 using std::cout;
 using std::endl;
 
+
+Tablero::Tablero(string path){
+
+	obtenerDatos(path);
+}
+
 Tablero::Tablero(int cantFilas, int cantColumnas){
 
-	if(!((cantFilas > 0) && (cantColumnas > 0))){
-		throw string(
-					"La cantidad de filas y \
-					columnas debe ser mayor a 0"
-					);
-	}
-
-	filas = cantFilas;
-	columnas = cantColumnas;
-	juego = new Celula**[filas];
-
-	for(int fila = 0; fila < filas; fila++){
-		juego[fila] = new Celula*[columnas];
-		inicializarFila(juego[fila]);
-	}
-
+	inicializarTablero(cantFilas, cantColumnas);
 }
+
 
 Tablero::~Tablero(){
 
@@ -44,6 +38,8 @@ void Tablero::agregarCelula(int fila, int columna){
 	if(posicionValida(fila, columna)){
 		juego[fila][columna] = new Celula;
 		juego[fila][columna]->nacer();
+
+
 	}
 	else{
 		throw string("Posicion invalida");
@@ -52,11 +48,12 @@ void Tablero::agregarCelula(int fila, int columna){
 }
 
 void Tablero::imprimirTablero(){
-
+	poblacion = 0;
 	for(int fila = 0; fila < filas; fila++){
 		for(int columna = 0; columna < columnas; columna++){
 			if(juego[fila][columna]){
 				cout << "*";
+				poblacion++;
 			}
 			else{
 				cout << " ";
@@ -64,8 +61,39 @@ void Tablero::imprimirTablero(){
 		}
 		cout << endl;
 	}
+	imprimirInfoActual();
 
 }
+
+void Tablero::imprimirInfoActual(){
+	cout << "Generacion: " << turno
+		 << endl
+		 << "poblacion: "<< poblacion
+		 << " | "
+		 << "Nacimientos: " << nacimientos
+	 	 << " | "
+		 << "Muertes: " << muertes
+		 << endl;
+	if(turno > 0){
+
+		cout << "Promedio de nacimientos: " << calcularPromedio(totalNacimientos, turno)
+			 << " | "
+			 <<"Promedio de muertes: " << calcularPromedio(totalMuertes, turno)
+			 << endl;
+		estadoDelJuego();
+	}
+
+
+}
+
+void Tablero::estadoDelJuego(){
+	if ((nacimientos == 0) && (muertes == 0)){
+		std::cout << "estado del juego: congelado" << std::endl;
+	}else{
+		std::cout << "estado del juego: activo" << std::endl;
+	}
+}
+
 
 void Tablero::actualizar(){
 
@@ -88,7 +116,6 @@ void Tablero::limpiarCelula(int fila, int columna){
 
 	delete juego[fila][columna];
 	juego[fila][columna] = NULL;
-
 }
 
 void Tablero::limpiarFila(int fila){
@@ -121,6 +148,7 @@ void Tablero::limpiarTablero(){
 	delete [] juego;
 
 }
+
 
 void Tablero::contarAdyacentes(int nrFila, int nrColumna){
 	int filaActual, columnaActual;
@@ -158,20 +186,27 @@ void Tablero::contarVecina(int nrFila, int nrColumna){
 
 void Tablero::definirTablero(){
 
+	nacimientos = 0;
+	muertes = 0;
+
+
 	for(int fila = 0; fila < filas; fila++){
 		for(int columna = 0; columna < columnas; columna++){
 			if(juego[fila][columna]){
 				juego[fila][columna]->decidirEstado();
+				sumarSuceso(juego[fila][columna]->obtenerEstado(),
+						juego[fila][columna]->obtenerCambio());
 			}
 			/*
 			 * Si la celula queda muerta, libero la memoria
 			 */
 			if(celulaMuerta(fila, columna)){
-
 				limpiarCelula(fila, columna);
 			}
 		}
 	}
+
+	turno++;
 
 }
 
@@ -193,8 +228,106 @@ void Tablero::inicializarFila(Celula**& fila){
 
 }
 
+void Tablero::sumarSuceso(bool estadoActual, bool cambio){
+	if((estadoActual) && (cambio)){
+		nacimientos++;
+		totalNacimientos++;
+	}else if(!(estadoActual) && (cambio)){
+		muertes++;
+		totalMuertes++;
+	}
+
+}
+
+float Tablero::calcularPromedio(unsigned int total, unsigned int turno){
+
+	float promedio;
+	promedio = (float)total/(float)turno;
+
+	return promedio;
+}
+
 bool Tablero::celulaMuerta(int nrFila, int nrColumna){
 
 	return (juego[nrFila][nrColumna] &&
 			!(juego[nrFila][nrColumna]->obtenerEstado()));
 }
+
+void Tablero::obtenerDatos(std::string path){
+
+	std::ifstream entrada;
+	int filas, columnas;
+	std::string auxiliar="";
+
+	entrada.open(path);
+
+	entrada >> auxiliar;
+
+	if (auxiliar == "tablero"){
+		entrada >> filas;
+		entrada >> columnas;
+	}
+	else {
+		throw std::string("Error de formato.");
+	}
+
+	this->inicializarTablero(filas, columnas);
+
+	if (! entrada.eof()){
+		entrada >> auxiliar;
+	}
+
+	while (! entrada.eof()){
+		int fila, columna;
+
+		if (auxiliar == "celula"){
+			entrada >> fila;
+			entrada >> columna;
+		}
+
+		string placeHolder0;
+		int placeholder1;
+		entrada >> auxiliar;
+
+		while (auxiliar == "gen"){
+			//int info[2];
+			//entrada >> info[0];
+			entrada >> placeHolder0;
+			entrada >> placeholder1;
+			//entrada >> info[1];
+			//infoGen.push(info[2]);
+			entrada >> auxiliar;
+		}
+		entrada >> auxiliar;
+
+		this->agregarCelula(fila, columna);//, infoGen);
+
+		}
+}
+
+void Tablero::inicializarTablero(int cantFilas, int cantColumnas){
+
+	if(!((cantFilas > 0) && (cantColumnas > 0))){
+		throw string(
+					"La cantidad de filas y \
+					columnas debe ser mayor a 0"
+					);
+	}
+
+	filas = cantFilas;
+	columnas = cantColumnas;
+	juego = new Celula**[filas];
+
+	for(int fila = 0; fila < filas; fila++){
+		juego[fila] = new Celula*[columnas];
+		inicializarFila(juego[fila]);
+	}
+
+	muertes = 0;
+	nacimientos = 0;
+	totalMuertes = 0;
+	totalNacimientos = 0;
+	turno = 0;
+}
+
+

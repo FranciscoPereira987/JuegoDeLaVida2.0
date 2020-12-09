@@ -1,37 +1,28 @@
 /*
  * celula.h
  *
- *  Created on: Dec 1, 2020
- *      Author: francisco
+ *  Created on: Dec 3, 2020
+ *      Author: shory
  */
 
 #ifndef CELULA_H_
 #define CELULA_H_
 
-
-/*
- * El enum Estado se usa para
- * hacer referencia al estado de la celula
- * dado que 0 = false y 1 = true
- */
 enum Estado{
 	MUERTA = 0,
 	VIVA
 };
 
-
 /*
- *	La celula posee estado y puntaje
- *	puntaje hace referencia a la cantidad de celulas
- *	vivas adyacentes a la misma
- *	para determinar el estado de la celula sigue las
- *	reglas del juego de la vida
+ *
  */
 class Celula{
 
 private:
 
 	bool estado;
+
+	bool cambioDeEstado;
 
 	char puntaje;
 
@@ -75,11 +66,18 @@ public:
 	bool obtenerEstado();
 
 	/*
+	 * post: Devuelve el cambio de estado de la celula
+	 */
+	bool obtenerCambio();
+
+	/*
 	 * Post: define el estado de la celula segun
 	 * su puntaje
 	 */
 	void decidirEstado();
+
 };
+
 
 
 #endif /* CELULA_H_ */

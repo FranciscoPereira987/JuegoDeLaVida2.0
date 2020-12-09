@@ -39,8 +39,6 @@ private:
 
 	unsigned int tamanio;
 
-	unsigned int posicionActual;
-
 	/*
 	 * Post: Libera la memoria de todos
 	 * los nodos de la lista
@@ -73,20 +71,6 @@ private:
 	 * Post: Elimina al primer elemento de la lista
 	 */
 	void eliminarPrimero();
-
-	/*
-	 * Post: Dirije el cursor al
-	 * head
-	 */
-	void apuntarHead();
-
-	/*
-	 * Post: Mueve el cursor
-	 * a la derecha, si la posicion
-	 * es la ultima, lo devuelve
-	 * al head
-	 */
-	void avanzarCursor();
 
 	/*
 	 * Pre: La posicion debe estar en el rango
@@ -168,6 +152,26 @@ public:
 	 */
 	 Type operator[](int posicion);
 
+	 /*
+	 * Post: Mueve el cursor
+	 * a la derecha, si la posicion
+	 * es la ultima, devuelve NULL
+	 */
+	 void avanzarCursor();
+
+	 /*
+	 * Post: Dirije el cursor al
+	 * head
+	 */
+	 void inicializarCursor();
+
+	 /*
+	  * Pre: El cursor no debe apuntar a NULL
+	  * Post: Obtiene el valor guardado
+	  * en el cursor
+	  */
+	 Type obtenerCursor();
+
 };
 
 template <class Type>
@@ -179,7 +183,7 @@ Lista<Type>::Lista(){
 
 	tamanio = 0;
 
-	posicionActual = -1;
+
 
 }
 
@@ -190,7 +194,6 @@ Lista<Type>::Lista(Type valor){
 
 	cursor = head;
 
-	posicionActual = 0;
 
 	tamanio = 1;
 
@@ -234,7 +237,7 @@ void Lista<Type>::push(Type valor){
 	Nodo<Type>* nuevo = new Nodo<Type>(valor, head);
 
 	head = nuevo;
-	apuntarHead();
+
 	tamanio++;
 }
 
@@ -336,8 +339,8 @@ bool Lista<Type>::posicionValida(int posicion){
 template <class Type>
 void Lista<Type>::insertarElemento(Type valor, int posFinal){
 
-	moverCursor(posFinal-1);
 
+	moverCursor(posFinal-1);
 
 	Nodo<Type>* nuevo = new Nodo<Type>(valor, cursor->getNext());
 
@@ -370,34 +373,36 @@ void Lista<Type>::eliminarPrimero(){
 	delete head;
 	head = nuevoHead;
 	tamanio--;
-	apuntarHead();
 
 }
 
 template <class Type>
-void Lista<Type>::apuntarHead(){
+void Lista<Type>::inicializarCursor(){
 
 	cursor = head;
-	posicionActual = 0;
+
 
 }
 
 template <class Type>
 void Lista<Type>::avanzarCursor(){
 
+	if(!(cursor)){
+		throw string("CURSOR EN POSICION INVALIDA");
+	}
+
 	cursor = cursor->getNext();
 
-	posicionActual++;
 }
 
 template <class Type>
 void Lista<Type>::moverCursor(int posicion){
 
-	if(posicionActual > posicion){
-		apuntarHead();
-	}
-	while(posicionActual != posicion){
+	int posActual = 0;
+	inicializarCursor();
+	while(posActual < posicion){
 		avanzarCursor();
+		posActual++;
 	}
 
 }

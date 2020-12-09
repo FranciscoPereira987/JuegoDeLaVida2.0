@@ -1,8 +1,8 @@
 /*
  * tablero.h
  *
- *  Created on: Dec 1, 2020
- *      Author: francisco
+ *  Created on: Dec 3, 2020
+ *      Author: shory
  */
 
 #ifndef TABLERO_H_
@@ -26,11 +26,7 @@ using std::string;
 typedef unsigned int uint;
 
 /*
- * Matriz de punteros a Celulas
- * Todos los punteros empiezan apuntando a NULL
- * Solo se pueden agregar celulas dentro de los limites
- * del Tablero [0-filas) o [0-columnas)
- * Se actualiza segun las reglas de las celulas
+ *
  */
 class Tablero{
 
@@ -39,7 +35,32 @@ private:
 	int filas;
 	int columnas;
 
+	unsigned int poblacion;
+
+	unsigned int muertes;
+	unsigned int nacimientos;
+
+	unsigned int totalMuertes;
+	unsigned int totalNacimientos;
+
+	unsigned int turno;
+
 	Celula*** juego;
+
+	/*
+	 * Pre: La cantidad de filas y columnas debe ser
+	 * positiva
+	 * Post: Carga el tablero desde un archivo
+	 */
+	void obtenerDatos(string path);
+
+	/*
+	 * Pre: La cantidad de filas y columnas debe
+	 * ser positiva
+	 * Post: Inicializa el Tablero
+	 */
+	void inicializarTablero(int cantFilas, int cantColumnas);
+
 
 	/*
 	 * Pre: El nrFila y el nrColumna debe ser
@@ -100,9 +121,28 @@ private:
 	 */
 	void inicializarFila(Celula**& fila);
 
+	/*
+	 * pre: una celula nacio o murio
+	 * post: suma el nacimiento o la muerte
+	 */
+	void sumarSuceso(bool estadActual, bool cambio);
+
+	/*
+	 * Post: divide el total por la cantidad de turnos
+	 * y retorna el resultado
+	 */
+	float calcularPromedio(unsigned int total,unsigned int turnos);
 
 
 public:
+
+	/*
+	 * Pre: La ruta debe ser valida y
+	 * contener una cantidad de columnas y
+	 * filas positivas
+	 * Post: Inicializa el tablero de juego
+	 */
+	Tablero(string path);
 
 	/*
 	 * pre: cantFilas y cantColumnas deben ser
@@ -135,6 +175,16 @@ public:
 	 * Post: imprime el tablero
 	 */
 	void imprimirTablero();
+
+	/*
+	 * Post: Imprime informacion sobre el estado del juego
+	 */
+	void imprimirInfoActual();
+
+	/*
+	 * Post: imprime si el juego esta congelado o activo
+	 */
+	void estadoDelJuego();
 
 };
 
