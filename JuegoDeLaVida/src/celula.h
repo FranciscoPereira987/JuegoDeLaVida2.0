@@ -16,6 +16,8 @@ enum Estado{
 	VIVA
 };
 
+#define PRIMERA 0
+
 /*
  *
  */
@@ -29,7 +31,7 @@ private:
 
 	char puntaje;
 
-	Lista<InformacionGenetica>** genes;
+	Lista<InformacionGenetica>* genes;
 
 
 	/*

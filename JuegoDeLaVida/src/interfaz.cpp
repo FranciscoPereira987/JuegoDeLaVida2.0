@@ -15,7 +15,7 @@ Juego::Juego(){
 	var = 2;
 }
 
-Tablero Juego::agregarCelulas(string path){
+Tablero* Juego::agregarCelulas(string path){
 
 	/*Tablero partida(20, 80);
 
@@ -27,18 +27,18 @@ Tablero Juego::agregarCelulas(string path){
 
 	return partida;*/
 
-	Tablero partida(path);
+	Tablero* partida = new Tablero(path);
 
 	return partida;
 }
 
-void Juego::DesarrolloDelJuego(Tablero partida){
+void Juego::DesarrolloDelJuego(Tablero* partida){
 
 	var = 1;
 
 	do{
-		partida.imprimirTablero();
-		partida.actualizar();
+		partida->imprimirTablero();
+		partida->actualizar();
 
 		std::cout << std::endl << "Para continuar, ingrese:" << std::endl;
 		std::cout << "(1) Siguiente turno." << std::endl;
@@ -60,8 +60,10 @@ void Juego::pedirEleccion(){
 void Juego::iniciarPartida(string path){
 
 	while(var == 2){
+		Tablero* partida = agregarCelulas(path);
+		this->DesarrolloDelJuego(partida);
 
-		this->DesarrolloDelJuego(agregarCelulas(path));
+		delete partida;
 	}
 
 	std::cout <<"-----  FIN DEL JUEGO -----" << std::endl;

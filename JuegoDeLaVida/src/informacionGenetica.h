@@ -63,13 +63,33 @@ public:
 	 */
 	int obtenerEdad();
 
+
+	/*
+	 * Post: Aumenta la edad del gen en uno
+	 */
 	void envejecer();
 
+	/*
+	 * Post: Devuelve los bits del gen
+	 */
 	std::string devolverBits();
 
+	/*
+	 * Post: Devuelve si la cadena de bits del
+	 * gen es igual a la de otro
+	 */
 	bool operator==(InformacionGenetica otro);
 
+	/*
+	 * Post: Devuelve si la cadena de bits del gen
+	 * es mayor a la del otro
+	 */
 	bool operator >(InformacionGenetica otro);
+
+	/*
+	 * Post: Devuelve si la cadena de bits del gen es
+	 * menor a la del otro
+	 */
 	bool operator<(InformacionGenetica otro);
 };
 #endif /* INFORMACIONGENETICA_H_ */

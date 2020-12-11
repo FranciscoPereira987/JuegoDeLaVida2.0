@@ -79,6 +79,12 @@ private:
 	 */
 	void moverCursor(int posicion);
 
+	/*
+	 * Post: Crea una copia de otra lista
+	 * en la actual
+	 */
+	void copiarLista(Lista<Type>& otra);
+
 
 public:
 
@@ -187,6 +193,12 @@ public:
 	  */
 	 Type obtenerCursor();
 
+	 /*
+	  * Post: Hace que mi lista sea igual
+	  * a otra
+	  */
+	 Lista<Type>& operator=(Lista<Type>& otra);
+
 
 };
 
@@ -220,14 +232,11 @@ Lista<Type>::Lista(Type valor){
 template <class Type>
 Lista<Type>::Lista(Lista<Type>& otra){
 
-	otra.inicializarCursor();
+
 	tamanio = 0;
 	head = NULL;
-	while(otra.cursor->getNext()){
-		push(otra.obtenerCursor());
-		otra.avanzarCursor();
-	}
-	push(otra.obtenerCursor());
+	cursor = NULL;
+	this->copiarLista(otra);
 
 }
 
@@ -376,6 +385,16 @@ Type Lista<Type>::obtenerCursor(){
 	return cursor->getValue();
 }
 
+template <class Type>
+Lista<Type>& Lista<Type>::operator=(Lista<Type>& otra){
+
+	this->~Lista();
+	this->copiarLista(otra);
+
+	return *(this);
+
+}
+
 /*
  * Metodos privados
  */
@@ -467,5 +486,17 @@ void Lista<Type>::moverCursor(int posicion){
 	}
 
 }
+
+template <class Type>
+void Lista<Type>::copiarLista(Lista<Type>& otra){
+
+	otra.inicializarCursor();
+		while(otra.cursor->getNext()){
+			push(otra.obtenerCursor());
+			otra.avanzarCursor();
+		}
+		push(otra.obtenerCursor());
+}
+
 
 #endif /* LISTA_H_ */

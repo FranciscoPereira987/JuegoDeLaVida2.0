@@ -19,9 +19,9 @@ private:
 
 	int var;
 
-	void DesarrolloDelJuego(Tablero partida);
+	void DesarrolloDelJuego(Tablero* partida);
 
-	Tablero agregarCelulas(string path);
+	Tablero* agregarCelulas(string path);
 
 public:
 
