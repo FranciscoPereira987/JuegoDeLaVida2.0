@@ -27,7 +27,7 @@ public:
 	* post: la instancia creada representa la
 	información dada en 'bits'.
 	*/
-	InformacionGenetica(std::string bits);
+	InformacionGenetica(std::string bits, int intensidad);
 	/* post: la instancia creada representa la
 	*
 	información dada por un bit: 0.
@@ -53,8 +53,23 @@ public:
 	*/
 	unsigned int contarBits();
 
+	/*
+	 * Post: Devuelve la intensidad del gen
+	 */
+	int obtenerIntensidad();
+
+	/*
+	 * Post: Devuelve la edad del gen
+	 */
+	int obtenerEdad();
+
 	void envejecer();
 
 	std::string devolverBits();
+
+	bool operator==(InformacionGenetica otro);
+
+	bool operator >(InformacionGenetica otro);
+	bool operator<(InformacionGenetica otro);
 };
 #endif /* INFORMACIONGENETICA_H_ */

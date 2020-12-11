@@ -20,6 +20,18 @@ int main(){
 
 	partida.iniciarPartida(path);
 
+	/*
+	Lista<int> prueba;
+
+	prueba.insertar(10);
+	prueba.insertar(1);
+	prueba.insertar(5);
+	prueba.insertar(-2);
+	prueba.insertar(11);
+
+	prueba.imprimir();
+	*/
+
 	return 0;
 }
 

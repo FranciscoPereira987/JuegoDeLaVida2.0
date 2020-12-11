@@ -8,21 +8,25 @@
 #include"informacionGenetica.h"
 
 
-InformacionGenetica::InformacionGenetica(std::string bits){
+InformacionGenetica::InformacionGenetica(std::string bits, int cargaGenetica){
 	int pos = bits.find("1");
 	if (pos != -1){
 		this->bits = bits.substr(pos);
+
 	}
 	else
 	{
 		this->bits = "0";
+
 	}
 	this->edad = 1;
+	this->intensidad = cargaGenetica;
 }
 
 InformacionGenetica::InformacionGenetica(){
 	this->bits = '0';
 	this->edad = 1;
+	this->intensidad = 0;
 }
 
 std::string InformacionGenetica::devolverBits(){
@@ -75,5 +79,28 @@ void InformacionGenetica::combinarCon(InformacionGenetica* otra){
 }
 
 
+bool InformacionGenetica::operator ==(InformacionGenetica otro){
 
+	return !(this->bits.compare(otro.bits));
 
+}
+
+bool InformacionGenetica::operator <(InformacionGenetica otro){
+
+	return (this->bits.compare(otro.bits) < 0);
+}
+
+bool InformacionGenetica::operator >(InformacionGenetica otro){
+
+	return (this->bits.compare(otro.bits) > 0);
+}
+
+int InformacionGenetica::obtenerIntensidad(){
+
+	return this->intensidad;
+}
+
+int InformacionGenetica::obtenerEdad(){
+
+	return this->edad;
+}

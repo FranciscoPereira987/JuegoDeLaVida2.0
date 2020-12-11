@@ -8,6 +8,7 @@
 
 #include "tablero.h"
 #include "lista.h"
+#include "informacionGenetica.h"
 #include <iostream>
 #include <fstream>
 using std::cout;
@@ -33,10 +34,11 @@ Tablero::~Tablero(){
 
 }
 
-void Tablero::agregarCelula(int fila, int columna){
+void Tablero::agregarCelula(int fila, int columna\
+		, Lista<InformacionGenetica> genes){
 
 	if(posicionValida(fila, columna)){
-		juego[fila][columna] = new Celula;
+		juego[fila][columna] = new Celula(genes);
 		juego[fila][columna]->nacer();
 
 
@@ -101,7 +103,9 @@ void Tablero::actualizar(){
 		for(int columna = 0; columna < columnas; columna++){
 			if(juego[fila][columna] &&
 					!(celulaMuerta(fila, columna))){
-				contarAdyacentes(fila, columna);
+				Lista<InformacionGenetica> genesActual(
+						*juego[fila][columna]->obtenerGenes());
+				contarAdyacentes(fila, columna, genesActual);
 			}
 		}
 	}
@@ -150,7 +154,8 @@ void Tablero::limpiarTablero(){
 }
 
 
-void Tablero::contarAdyacentes(int nrFila, int nrColumna){
+void Tablero::contarAdyacentes(int nrFila, int nrColumna\
+		,Lista<InformacionGenetica> genes){
 	int filaActual, columnaActual;
 	/*Son las posiciones relativas de las celulas adyacentes*/
 	int movimientos[][2] = {
@@ -164,12 +169,13 @@ void Tablero::contarAdyacentes(int nrFila, int nrColumna){
 	     * el tablero
 	     */
 	    if(posicionValida(filaActual, columnaActual)){
-	    	contarVecina(filaActual, columnaActual);
+	    	contarVecina(filaActual, columnaActual, genes);
 	    }
 	}
 }
 
-void Tablero::contarVecina(int nrFila, int nrColumna){
+void Tablero::contarVecina(int nrFila, int nrColumna\
+		, Lista<InformacionGenetica> genes){
 
 	/*
 	 * declaro una referencia al puntero
@@ -177,10 +183,16 @@ void Tablero::contarVecina(int nrFila, int nrColumna){
 	Celula*& actual = juego[nrFila][nrColumna];
 
 	if(!actual){
-		actual = new Celula;
+		actual = new Celula(genes);
+	}
+	else{
+		actual->sumarVecina();
+
+		actual->agregarPadre(genes);
 	}
 
-	actual->sumarVecina();
+
+
 
 }
 
@@ -193,7 +205,7 @@ void Tablero::definirTablero(){
 	for(int fila = 0; fila < filas; fila++){
 		for(int columna = 0; columna < columnas; columna++){
 			if(juego[fila][columna]){
-				juego[fila][columna]->decidirEstado();
+				juego[fila][columna]->decidirEstado(this->turno);
 				sumarSuceso(juego[fila][columna]->obtenerEstado(),
 						juego[fila][columna]->obtenerCambio());
 			}
@@ -285,22 +297,22 @@ void Tablero::obtenerDatos(std::string path){
 			entrada >> columna;
 		}
 
-		string placeHolder0;
-		int placeholder1;
+		string gen;
+		int intensidad;
+		Lista<InformacionGenetica> genes;
 		entrada >> auxiliar;
 
 		while (auxiliar == "gen"){
-			//int info[2];
-			//entrada >> info[0];
-			entrada >> placeHolder0;
-			entrada >> placeholder1;
-			//entrada >> info[1];
-			//infoGen.push(info[2]);
+
+			entrada >> gen;
+			entrada >> intensidad;
 			entrada >> auxiliar;
+			genes.insertar(InformacionGenetica(gen, intensidad));
 		}
 		entrada >> auxiliar;
 
-		this->agregarCelula(fila, columna);//, infoGen);
+		this->agregarCelula(fila-1, columna-1, genes);
+		//genes.~Lista();
 
 		}
 }

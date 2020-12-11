@@ -89,6 +89,12 @@ public:
 	Lista(Type valor);
 
 	/*
+	 * Post: Crea una copia de
+	 * otra lista
+	 */
+	Lista(Lista<Type>& otra);
+
+	/*
 	 * Post: Crea una lista vacia
 	 */
 	Lista();
@@ -105,6 +111,15 @@ public:
 	 * especificada
 	 */
 	void insertar(Type valor, int posicion);
+
+	/*
+	 * Pre: El tipo de dato de la lista
+	 * debe ser comparable
+	 * Post: Incerta en la lista, el valor
+	 * luego de encontrar un valor menor
+	 * al pasado como parametro
+	 */
+	void insertar(Type valor);
 
 	/*
 	 * Post: Devuelve la cantidad de
@@ -172,6 +187,7 @@ public:
 	  */
 	 Type obtenerCursor();
 
+
 };
 
 template <class Type>
@@ -202,11 +218,27 @@ Lista<Type>::Lista(Type valor){
 }
 
 template <class Type>
+Lista<Type>::Lista(Lista<Type>& otra){
+
+	otra.inicializarCursor();
+	tamanio = 0;
+	head = NULL;
+	while(otra.cursor->getNext()){
+		push(otra.obtenerCursor());
+		otra.avanzarCursor();
+	}
+	push(otra.obtenerCursor());
+
+}
+
+template <class Type>
 Lista<Type>::~Lista(){
 
 	if(head){
 		liberar(head);
+		head = NULL;
 	}
+
 
 }
 
@@ -313,6 +345,35 @@ Type Lista<Type>::operator[](int posicion){
 
 	return (this->cursor->getValue());
 
+}
+
+template <class Type>
+void Lista<Type>::insertar(Type valor){
+
+	if(!head){
+		push(valor);
+	}
+	else if((head->getValue() < valor)){
+		push(valor);
+	}
+	else{
+		inicializarCursor();
+		while((cursor->getNext()) && \
+				(cursor->getNext()->getValue() > valor)){
+			avanzarCursor();
+		}
+		Nodo<Type>* aux = new Nodo<Type>(valor);
+
+		aux->setNext(cursor->getNext());
+		cursor->setNext(aux);
+	}
+
+}
+
+template <class Type>
+Type Lista<Type>::obtenerCursor(){
+
+	return cursor->getValue();
 }
 
 /*
