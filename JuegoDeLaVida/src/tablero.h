@@ -68,7 +68,7 @@ private:
 	 * Post: Se le agrega puntaje a las celulas
 	 * adyacentes
 	 */
-	void contarAdyacentes(int nrFila, int nrColumna, Lista<InformacionGenetica> genes);
+	void contarAdyacentes(int nrFila, int nrColumna, Genes genes);
 
 	/*
 	 * Pre: nrFila y nrColumna deben ser validos
@@ -77,7 +77,7 @@ private:
 	 * Post: Se crea una celula con puntaje uno si no
 	 * habia ninguna, caso contrario. Se le suma una vecina
 	 */
-	void contarVecina(int nrFila, int nrColumna, Lista<InformacionGenetica> genes);
+	void contarVecina(int nrFila, int nrColumna, Genes genes);
 
 	/*
 	 * Post: Se libera la memoria de los punteros

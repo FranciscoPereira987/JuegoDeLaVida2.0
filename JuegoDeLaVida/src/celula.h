@@ -11,12 +11,14 @@
 #include "lista.h"
 #include "informacionGenetica.h"
 
+#include "genes.h"
+
 enum Estado{
 	MUERTA = 0,
 	VIVA
 };
 
-#define PRIMERA 0
+
 
 /*
  *
@@ -29,9 +31,7 @@ private:
 
 	bool cambioDeEstado;
 
-	char puntaje;
-
-	Lista<InformacionGenetica>* genes;
+	Genes* genes;
 
 
 	/*
@@ -47,74 +47,32 @@ private:
 	void resetearPuntaje();
 
 	/*
-	 * pre: Debe haber tres cargas
-	 * geneticas
-	 * Post: devuelve el minimo
-	 * de los tres genes superiores
-	 */
-	InformacionGenetica devolverMaximo();
-
-	/*
-	 * Pre: Debe haber tres padres
-	 * para la celula(puntaje == 3)
-	 * Post: Devuelve la mezcla de
-	 * genes de la celula y pasa el puntaje a 0
-	 */
-	void mezclarGenes(int nrTurno);
-
-	/*
-	 * Pre: Debe haber tres secuencias
-	 * geneticas disponibles
-	 * Post: Segun el maximo, transfiere
-	 * ese gen a las celulas
-	 */
-	void transferir(InformacionGenetica minimo,
-			Lista<InformacionGenetica>* cargaFinal, int nrTurno);
-
-	/*
-	 * Pre: Debe haber tres cargas geneticas
-	 * para transferir
-	 * Post: Genera la carga genetica de la celula
-	 */
-	void transferenciaTriple(Lista<InformacionGenetica>* cargaFinal,
-			int nrTurno);
-
-	/*
-	 * Pre: Debe haber dos cargas geneticas
-	 * para transferir
-	 * Post: Genera la carga genetica de la celula
-	 */
-	void transferenciaDoble(int primero, int segundo,
-			Lista<InformacionGenetica>* cargaFinal, int nrTurno);
-
-	/*
-	 * Pre: Debe haber una unica carga genetica para
-	 * transferir
-	 * Post: Genera la carga genetica de la celula
-	 */
-	void transferenciaSimple(int indice,
-			Lista<InformacionGenetica>* cargaFinal, int nrTurno);
-
-	/*
-	 * Post: Libera la memoria utilizada por los genes
-	 */
-	void destruirGenes();
-
-	/*
 	 * Pre: La celula tiene que tener 3 padres
 	 * Post: nace la celula
 	 */
 	void nacer(int nrTurno);
+
+	/*
+	 * Pre: La celula debe tener tres padres
+	 * Post: Se realiza la mezcla de genes
+	 */
+	void mezclarGenes(int nrTurno);
 
 public:
 
 	/*
 	 * Pre: La celula debe tener un padre
 	 * Post: Crea una celula muerta
-	 * con puntaje cero con genes
+	 * con puntaje uno con genes
 	 * y la carga genetica del padre
 	 */
-	Celula(Lista<InformacionGenetica> genesPadre);
+	Celula(Genes genesPadre);
+
+	/*
+	 * post: Se crea una celula viva
+	 * con la carga genetica deseada
+	 */
+	Celula(Lista<InformacionGenetica> cargaGenetica);
 
 	/*
 	 * Post: ---
@@ -127,7 +85,7 @@ public:
 	 * debe ser menor a 3
 	 * Post: Le agrega un padre a la celula
 	 */
-	void agregarPadre(Lista<InformacionGenetica> nuevoPadre);
+	void agregarPadre(Genes nuevoPadre);
 
 	/*
 	 * pre: La celula debe estar muerta
@@ -140,7 +98,7 @@ public:
 	 * Post: Aumenta en uno el puntaje
 	 * de la celula
 	 */
-	void sumarVecina();
+	void sumarVecina(Genes progenitor);
 
 	/*
 	 * Post: Devuelve el estado actual de la
@@ -164,7 +122,7 @@ public:
 	 * Post: Devuelve la carga genetica de la
 	 * celula
 	 */
-	Lista<InformacionGenetica>* obtenerGenes();
+	Genes obtenerGenes();
 
 };
 

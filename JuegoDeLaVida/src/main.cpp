@@ -12,9 +12,11 @@
 
 #include <iostream>
 using std::cin;
+using std::cout;
+using std::endl;
 
 int main(){
-
+try{
 	Juego partida;
 	string path = "/home/francisco/TPALGOII/JuegoDeLaVida/prueba";
 
@@ -31,6 +33,11 @@ int main(){
 
 	prueba.imprimir();
 	*/
+}catch(string& excepcion){
+
+	cout << excepcion << endl;
+
+}
 
 	return 0;
 }

@@ -39,8 +39,6 @@ void Tablero::agregarCelula(int fila, int columna\
 
 	if(posicionValida(fila, columna)){
 		juego[fila][columna] = new Celula(genes);
-		juego[fila][columna]->nacer();
-
 
 	}
 	else{
@@ -103,9 +101,8 @@ void Tablero::actualizar(){
 		for(int columna = 0; columna < columnas; columna++){
 			if(juego[fila][columna] &&
 					!(celulaMuerta(fila, columna))){
-				Lista<InformacionGenetica> genesActual(
-						*juego[fila][columna]->obtenerGenes());
-				contarAdyacentes(fila, columna, genesActual);
+				Genes actuales(*juego[fila][columna]->obtenerGenes().obtenerGenes());
+				contarAdyacentes(fila, columna, actuales);
 			}
 		}
 	}
@@ -155,7 +152,7 @@ void Tablero::limpiarTablero(){
 
 
 void Tablero::contarAdyacentes(int nrFila, int nrColumna\
-		,Lista<InformacionGenetica> genes){
+		,Genes genes){
 	int filaActual, columnaActual;
 	/*Son las posiciones relativas de las celulas adyacentes*/
 	int movimientos[][2] = {
@@ -175,7 +172,7 @@ void Tablero::contarAdyacentes(int nrFila, int nrColumna\
 }
 
 void Tablero::contarVecina(int nrFila, int nrColumna\
-		, Lista<InformacionGenetica> genes){
+		, Genes genes){
 
 	/*
 	 * declaro una referencia al puntero
@@ -186,9 +183,8 @@ void Tablero::contarVecina(int nrFila, int nrColumna\
 		actual = new Celula(genes);
 	}
 	else{
-		actual->sumarVecina();
+		actual->sumarVecina(genes);
 
-		actual->agregarPadre(genes);
 	}
 
 
