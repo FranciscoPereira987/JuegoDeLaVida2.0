@@ -24,6 +24,8 @@ using std::cout;
 using std::endl;
 #endif
 
+#include "informacionGenetica.h"
+
 /*
  * Template de lista simplemente
  * enlazada con cursor
@@ -199,6 +201,12 @@ public:
 	  */
 	 Lista<Type>& operator=(Lista<Type>& otra);
 
+	 /*
+	  * Post: Devuelve si el elemento
+	  * se encuentra en la lista
+	  */
+	 bool estaEnLista(Type elemento);
+
 
 };
 
@@ -337,6 +345,7 @@ void Lista<Type>::imprimir(){
 
 }
 
+
 template <class Type>
 unsigned int Lista<Type>::longitud(){
 
@@ -394,6 +403,20 @@ Lista<Type>& Lista<Type>::operator=(Lista<Type>& otra){
 	return *(this);
 
 }
+
+template <class Type>
+bool Lista<Type>::estaEnLista(Type elemento){
+
+	this->inicializarCursor();
+	while(this->cursor &&
+			this->obtenerCursor() != elemento){
+		this->avanzarCursor();
+	}
+
+
+	return (cursor && this->obtenerCursor() == elemento);
+}
+
 
 /*
  * Metodos privados
@@ -460,7 +483,6 @@ template <class Type>
 void Lista<Type>::inicializarCursor(){
 
 	cursor = head;
-
 
 }
 

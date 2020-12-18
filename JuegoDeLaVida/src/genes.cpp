@@ -74,17 +74,29 @@ Lista<InformacionGenetica>* Genes::obtenerGenes(){
 	return cargaGenetica;
 }
 
-void Genes::mezclarGenes(int nrTurno){
+void Genes::mezclarGenes(int nrTurno, Lista<InformacionGenetica>* baseGenetica){
 
 	Lista<InformacionGenetica>* cargaFinal = new Lista<InformacionGenetica>;
+	Pila<InformacionGenetica>* genesACombinar = new Pila<InformacionGenetica>;
 	InformacionGenetica maximo;
 	while(cargaGenetica[0].longitud() ||
 			cargaGenetica[1].longitud() ||
 			cargaGenetica[2].longitud()){
 		maximo = devolverMaximo();
-		transferir(maximo, cargaFinal, nrTurno);
+		transferir(maximo, cargaFinal, genesACombinar, nrTurno);
 	}
-
+	if(!genesACombinar->vacia()){
+		InformacionGenetica genMutado = combinarGenes(genesACombinar, nrTurno);
+		revisarGen(genMutado, cargaFinal, baseGenetica);
+	}
+	/*
+	 * Libero la memoria de genes
+	 * para combinar
+	 */
+	delete genesACombinar;
+	/*
+	 * Paso a finalizar la transferencia
+	 */
 	finalizarTransferencia(cargaFinal);
 }
 
@@ -130,6 +142,7 @@ void Genes::reacomodarCargaGenetica(){
 
 void Genes::transferir(InformacionGenetica maximo,
 		Lista<InformacionGenetica>* cargaFinal,
+		Pila<InformacionGenetica>* genesACombinar,
 		int nrTurno){
 
 	int contador = 0, indices[3] = {0, 0, 0};
@@ -146,7 +159,7 @@ void Genes::transferir(InformacionGenetica maximo,
 		while(!(indices[i])){
 			i++;
 		}
-		transferenciaSimple(i, cargaFinal, nrTurno);
+		transferenciaSimple(i, genesACombinar, nrTurno);
 		break;
 	}
 	case 2:{
@@ -162,11 +175,11 @@ void Genes::transferir(InformacionGenetica maximo,
 			}
 			j++;
 		}
-		transferenciaDoble(primero, segundo, cargaFinal, nrTurno);
+		transferenciaDoble(primero, segundo, genesACombinar, cargaFinal, nrTurno);
 		break;
 	}
 	case 3:
-		transferenciaTriple(cargaFinal, nrTurno);
+		transferenciaTriple(cargaFinal, genesACombinar, nrTurno);
 		break;
 	default: throw string("ERROR EN TRANSFERENCIA");
 	}
@@ -174,15 +187,17 @@ void Genes::transferir(InformacionGenetica maximo,
 }
 
 void Genes::transferenciaSimple(int indice,
-		Lista<InformacionGenetica>* cargaFinal, int nrTurno){
+		Pila<InformacionGenetica>* genesACombinar,
+		int nrTurno){
 
 	InformacionGenetica nuevo(cargaGenetica[indice][0].devolverBits(),0);
 	cargaGenetica[indice].remove(PRIMERA);
-	cargaFinal->push(nuevo);
+	genesACombinar->apilar(nuevo);
 
 }
 
 void Genes::transferenciaDoble(int primero, int segundo,
+		Pila<InformacionGenetica>* genesACombinar,
 		Lista<InformacionGenetica>* cargaFinal, int nrTurno){
 
 	InformacionGenetica gen1 = cargaGenetica[primero][PRIMERA],
@@ -207,13 +222,20 @@ void Genes::transferenciaDoble(int primero, int segundo,
 		}
 	}
 	InformacionGenetica nuevo(gen1.devolverBits(), intensidad);
+	if(intensidad){
+		cargaFinal->push(nuevo);
+	}
+	else{
+		genesACombinar->apilar(nuevo);
+	}
 	cargaGenetica[primero].remove(PRIMERA);
 	cargaGenetica[segundo].remove(PRIMERA);
-	cargaFinal->push(nuevo);
+
 
 }
 
 void Genes::transferenciaTriple(Lista<InformacionGenetica>* cargaFinal,
+		Pila<InformacionGenetica>* genesACombinar,
 		int nrTurno){
 
 	InformacionGenetica gen1 = cargaGenetica[0][PRIMERA],
@@ -236,6 +258,12 @@ void Genes::transferenciaTriple(Lista<InformacionGenetica>* cargaFinal,
 	}
 
 	InformacionGenetica nuevo(gen1.devolverBits(), intensidad);
+	if(intensidad){
+		cargaFinal->push(nuevo);
+	}
+	else{
+		genesACombinar->apilar(nuevo);
+	}
 	cargaFinal->push(nuevo);
 	for (int i = 0; i < 3; i++){
 		cargaGenetica[i].remove(0);
@@ -243,4 +271,48 @@ void Genes::transferenciaTriple(Lista<InformacionGenetica>* cargaFinal,
 
 }
 
+InformacionGenetica Genes::combinarGenes(Pila<InformacionGenetica>* genesACombinar,
+		int nrTurno){
 
+	InformacionGenetica genFinal = genesACombinar->pop();
+	while(!genesACombinar->vacia()){
+		InformacionGenetica siguiente = genesACombinar->pop();
+		if(!genFinal.esMasJoven(&siguiente)){
+			genFinal.cambiarEdad(siguiente.obtenerEdad());
+		}
+		genFinal.combinarCon(&siguiente);
+	}
+	int intensidadFinal = (genFinal.obtenerEdad()/(100* nrTurno)) + 1;
+	genFinal.cambiarIntensidad(intensidadFinal);
+
+
+	return genFinal;
+}
+
+void Genes::revisarGen(InformacionGenetica genARevisar,
+		Lista<InformacionGenetica>* cargaFinal,
+		Lista<InformacionGenetica>* baseGenetica){
+
+	if(baseGenetica->estaEnLista(genARevisar)){
+		if(!cargaFinal->estaEnLista(genARevisar)){
+			/*
+			 * Si el gen esta en la base pero no en la
+			 * carga final, entonces le cambio su edad
+			 * por la correcta y lo inserto en la carga
+			 */
+			int edad = baseGenetica->obtenerCursor().obtenerEdad();
+			genARevisar.cambiarEdad(edad);
+			cargaFinal->insertar(genARevisar);
+		}
+
+	}
+	else{
+		/*
+		 * Si el gen no esta en la base
+		 * lo agrego a la base y a la cargaFinal
+		 */
+		baseGenetica->push(genARevisar);
+		cargaFinal->insertar(genARevisar);
+	}
+
+}

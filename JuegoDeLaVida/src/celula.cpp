@@ -51,9 +51,10 @@ bool Celula::obtenerCambio(){
 }
 
 
-void Celula::decidirEstado(int nrTurno){
+void Celula::decidirEstado(int nrTurno,
+		Lista<InformacionGenetica>* baseGenetica){
 
-	aplicarReglas(nrTurno);
+	aplicarReglas(nrTurno, baseGenetica);
 	resetearPuntaje();
 
 }
@@ -77,7 +78,8 @@ void Celula::resetearPuntaje(){
 	genes->resetearProgenitores();
 }
 
-void Celula::aplicarReglas(int nrTurno){
+void Celula::aplicarReglas(int nrTurno,
+		Lista<InformacionGenetica>* baseGenetica){
 	int puntaje = genes->obtenerProgenitores();
 
     if(estado){
@@ -86,24 +88,24 @@ void Celula::aplicarReglas(int nrTurno){
     }
     else{
         if((estado = (puntaje == 3))){
-        	nacer(nrTurno);
+        	nacer(nrTurno, baseGenetica);
         }
         cambioDeEstado = estado;
     }
 }
 
-void Celula::nacer(int nrTurno){
+void Celula::nacer(int nrTurno, Lista<InformacionGenetica>* baseGenetica){
 
 	estado = VIVA;
 
-	mezclarGenes(nrTurno);
+	mezclarGenes(nrTurno, baseGenetica);
 
 }
 
 
-void Celula::mezclarGenes(int nrTurno){
+void Celula::mezclarGenes(int nrTurno, Lista<InformacionGenetica>* baseGenetica){
 
-	genes->mezclarGenes(nrTurno);
+	genes->mezclarGenes(nrTurno, baseGenetica);
 
 }
 

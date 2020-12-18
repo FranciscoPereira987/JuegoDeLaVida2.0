@@ -30,6 +30,8 @@ Tablero::~Tablero(){
 
 	if(juego){
 		limpiarTablero();
+		this->baseGenetica->imprimir();
+		delete this->baseGenetica;
 	}
 
 }
@@ -187,9 +189,6 @@ void Tablero::contarVecina(int nrFila, int nrColumna\
 
 	}
 
-
-
-
 }
 
 void Tablero::definirTablero(){
@@ -201,7 +200,8 @@ void Tablero::definirTablero(){
 	for(int fila = 0; fila < filas; fila++){
 		for(int columna = 0; columna < columnas; columna++){
 			if(juego[fila][columna]){
-				juego[fila][columna]->decidirEstado(this->turno);
+				juego[fila][columna]->decidirEstado(this->turno,
+						this->baseGenetica);
 				sumarSuceso(juego[fila][columna]->obtenerEstado(),
 						juego[fila][columna]->obtenerCambio());
 			}
@@ -267,7 +267,7 @@ void Tablero::obtenerDatos(std::string path){
 	int filas, columnas;
 	std::string auxiliar="";
 
-	entrada.open(path);
+	entrada.open(path.c_str());
 
 	entrada >> auxiliar;
 
@@ -311,6 +311,8 @@ void Tablero::obtenerDatos(std::string path){
 		//genes.~Lista();
 
 		}
+
+	entrada.close();
 }
 
 void Tablero::inicializarTablero(int cantFilas, int cantColumnas){
@@ -325,7 +327,7 @@ void Tablero::inicializarTablero(int cantFilas, int cantColumnas){
 	filas = cantFilas;
 	columnas = cantColumnas;
 	juego = new Celula**[filas];
-
+	this->baseGenetica = new Lista<InformacionGenetica>;
 	for(int fila = 0; fila < filas; fila++){
 		juego[fila] = new Celula*[columnas];
 		inicializarFila(juego[fila]);
@@ -335,7 +337,7 @@ void Tablero::inicializarTablero(int cantFilas, int cantColumnas){
 	nacimientos = 0;
 	totalMuertes = 0;
 	totalNacimientos = 0;
-	turno = 0;
+	turno = 1;
 }
 
 

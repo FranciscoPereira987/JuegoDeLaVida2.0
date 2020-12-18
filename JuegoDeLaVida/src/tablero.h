@@ -45,6 +45,8 @@ private:
 
 	unsigned int turno;
 
+	Lista<InformacionGenetica>* baseGenetica;
+
 	Celula*** juego;
 
 	/*

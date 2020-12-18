@@ -16,28 +16,20 @@ using std::cout;
 using std::endl;
 
 int main(){
-try{
-	Juego partida;
-	string path = "/home/francisco/TPALGOII/JuegoDeLaVida/prueba";
+	try{
 
-	partida.iniciarPartida(path);
+		Juego partida;
+		string path = "celulas/prueba";
 
-	/*
-	Lista<int> prueba;
+		partida.iniciarPartida(path);
 
-	prueba.insertar(10);
-	prueba.insertar(1);
-	prueba.insertar(5);
-	prueba.insertar(-2);
-	prueba.insertar(11);
 
-	prueba.imprimir();
-	*/
-}catch(string& excepcion){
 
-	cout << excepcion << endl;
+	}catch(string& excepcion){
 
-}
+		cout << excepcion << endl;
+
+	}
 
 	return 0;
 }

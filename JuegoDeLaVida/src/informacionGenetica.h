@@ -22,6 +22,13 @@ private:
 	std::string bits;
 	unsigned int edad;
 	unsigned int intensidad;
+
+	/*
+	 * Post: Define la cadena de bits
+	 * empezando desde el primer 1
+	 */
+	void definirBits();
+
 public:
 	/* pre : 'bits' es una secuencia de 1 y 0.
 	* post: la instancia creada representa la
@@ -38,6 +45,9 @@ public:
 	* bits, es decir si son iguales.
 	*/
 	bool esIgualA(InformacionGenetica* otra);
+
+	friend std::ostream& operator<<(std::ostream& o, InformacionGenetica const& gen);
+
 	/* post: combina la secuencia de bits de la
 	* instancia con la secuencia bits de
 	* 'otra', aplicando un OR bit a bit.
@@ -59,9 +69,25 @@ public:
 	int obtenerIntensidad();
 
 	/*
+	 * Post: Cambia la intensidad del gen
+	 */
+	void cambiarIntensidad(int nuevaIntensidad);
+
+	/*
+	 * Post: Devuelve si el gen es mas
+	 * joven que otro
+	 */
+	bool esMasJoven(InformacionGenetica* otro);
+
+	/*
 	 * Post: Devuelve la edad del gen
 	 */
 	int obtenerEdad();
+
+	/*
+	 * Post: Cambia la edad de un gen
+	 */
+	void cambiarEdad(int nuevaEdad);
 
 
 	/*
@@ -78,7 +104,13 @@ public:
 	 * Post: Devuelve si la cadena de bits del
 	 * gen es igual a la de otro
 	 */
-	bool operator==(InformacionGenetica otro);
+	bool operator ==(InformacionGenetica otro);
+
+	/*
+	 * Post: Devuelve si la cadena de bits
+	 * es distinta a la de otro
+	 */
+	bool operator !=(InformacionGenetica otro);
 
 	/*
 	 * Post: Devuelve si la cadena de bits del gen
@@ -90,6 +122,6 @@ public:
 	 * Post: Devuelve si la cadena de bits del gen es
 	 * menor a la del otro
 	 */
-	bool operator<(InformacionGenetica otro);
+	bool operator <(InformacionGenetica otro);
 };
 #endif /* INFORMACIONGENETICA_H_ */

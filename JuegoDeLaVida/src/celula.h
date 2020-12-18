@@ -17,9 +17,6 @@ enum Estado{
 	MUERTA = 0,
 	VIVA
 };
-
-
-
 /*
  *
  */
@@ -38,7 +35,7 @@ private:
 	 * Post: aplica las reglas del
 	 * juego de la vida a la celula
 	 */
-	void aplicarReglas(int nrTurno);
+	void aplicarReglas(int nrTurno, Lista<InformacionGenetica>* baseGenetica);
 
 	/*
 	 * Post: pone el puntaje de la celula
@@ -50,13 +47,13 @@ private:
 	 * Pre: La celula tiene que tener 3 padres
 	 * Post: nace la celula
 	 */
-	void nacer(int nrTurno);
+	void nacer(int nrTurno, Lista<InformacionGenetica>* baseGenetica);
 
 	/*
 	 * Pre: La celula debe tener tres padres
 	 * Post: Se realiza la mezcla de genes
 	 */
-	void mezclarGenes(int nrTurno);
+	void mezclarGenes(int nrTurno, Lista<InformacionGenetica>* baseGenetica);
 
 public:
 
@@ -115,7 +112,8 @@ public:
 	 * Post: define el estado de la celula segun
 	 * su puntaje
 	 */
-	void decidirEstado(int nrTurno);
+	void decidirEstado(int nrTurno,
+			Lista<InformacionGenetica>* baseGenetica);
 
 	/*
 	 * Pre: La celula debe estar viva

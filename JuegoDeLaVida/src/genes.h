@@ -10,6 +10,8 @@
 
 #include "lista.h"
 #include "informacionGenetica.h"
+#include "pila.h"
+
 
 enum tranferidos{
 
@@ -63,6 +65,7 @@ private:
 	 */
 	void transferir(InformacionGenetica maximo,
 			Lista<InformacionGenetica>* cargaFinal,
+			Pila<InformacionGenetica>* genesACombinar,
 			int nrTurno);
 
 	/*
@@ -71,6 +74,7 @@ private:
 	 * Post: Genera la carga genetica de la celula
 	 */
 	void transferenciaTriple(Lista<InformacionGenetica>* cargaFinal,
+			Pila<InformacionGenetica>* genesACombinar,
 			int nrTurno);
 
 	/*
@@ -79,6 +83,7 @@ private:
 	 * Post: Genera la carga genetica de la celula
 	 */
 	void transferenciaDoble(int primero, int segundo,
+			Pila<InformacionGenetica>* genesACombinar,
 			Lista<InformacionGenetica>* cargaFinal, int nrTurno);
 
 	/*
@@ -87,7 +92,25 @@ private:
 	 * Post: Genera la carga genetica de la celula
 	 */
 	void transferenciaSimple(int indice,
-			Lista<InformacionGenetica>* cargaFinal, int nrTurno);
+			Pila<InformacionGenetica>* genesACombinar,
+			int nrTurno);
+
+	/*
+	 * Pre: Debe haber al menos un gen para combinar
+	 * Post: Combina los genes dando lugar al gen mutado
+	 * y lo devuelve
+	 */
+	InformacionGenetica combinarGenes(Pila<InformacionGenetica>* genesACombinar,
+			int nrTurno);
+
+	/*
+	 * Post: Revisa si un gen se encuentra en
+	 * la base de genes, si no es asi. Lo agrega.
+	 * Si, en cambio, se encuentra. Cambia su edad.
+	 */
+	void revisarGen(InformacionGenetica genARevisar,
+			Lista<InformacionGenetica>* cargaFinal,
+			Lista<InformacionGenetica>* baseGenetica);
 
 
 public:
@@ -123,7 +146,7 @@ public:
 	 * Pre: Debe haber tres progenitores
 	 * Post: Se realiza la mezcla de los genes
 	 */
-	void mezclarGenes(int nrTurno);
+	void mezclarGenes(int nrTurno, Lista<InformacionGenetica>* baseGenetica);
 
 	/*
 	 * Pre: Los genes deben de estar transferidos
