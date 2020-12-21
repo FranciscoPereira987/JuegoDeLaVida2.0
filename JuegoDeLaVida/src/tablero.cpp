@@ -18,6 +18,7 @@ using std::endl;
 Tablero::Tablero(string path){
 
 	obtenerDatos(path);
+	seguimientoGenes = new ListaSeguimiento;
 }
 
 Tablero::Tablero(int cantFilas, int cantColumnas){
@@ -30,8 +31,8 @@ Tablero::~Tablero(){
 
 	if(juego){
 		limpiarTablero();
-		this->baseGenetica->imprimir();
 		delete this->baseGenetica;
+		delete seguimientoGenes;
 	}
 
 }
@@ -98,7 +99,7 @@ void Tablero::estadoDelJuego(){
 
 
 void Tablero::actualizar(){
-	envejecerBaseGenetica();
+
 	for(int fila = 0; fila < filas; fila++){
 		for(int columna = 0; columna < columnas; columna++){
 			if(juego[fila][columna] &&
@@ -111,16 +112,25 @@ void Tablero::actualizar(){
 	definirTablero();
 }
 
+void Tablero::imprimirBaseGenetica(){
+
+	this->baseGenetica->imprimir();
+
+}
+
+bool Tablero::genValido(string gen){
+
+    InformacionGenetica genAcomparar(gen, 0);
+
+    return baseGenetica->estaEnLista(genAcomparar);
+
+
+
+}
+
 /*
  * Metodos privados
  */
-
-void Tablero::envejecerBaseGenetica(){
-	for(int i=0; i < baseGenetica->longitud(); i++ ){
-		(*baseGenetica)[i].envejecer();
-	}
-}
-
 
 void Tablero::limpiarCelula(int fila, int columna){
 
@@ -207,7 +217,7 @@ void Tablero::definirTablero(){
 	for(int fila = 0; fila < filas; fila++){
 		for(int columna = 0; columna < columnas; columna++){
 			if(juego[fila][columna]){
-				juego[fila][columna]->decidirEstado(this->turno,
+				juego[fila][columna]->decidirEstado((this->turno + 1),
 						this->baseGenetica);
 				sumarSuceso(juego[fila][columna]->obtenerEstado(),
 						juego[fila][columna]->obtenerCambio());
@@ -217,13 +227,13 @@ void Tablero::definirTablero(){
 			 */
 			if(celulaMuerta(fila, columna)){
 				limpiarCelula(fila, columna);
-			}
-			else if(juego[fila][columna]){
-				juego[fila][columna]->envejecerGenes();
+			}else if(juego[fila][columna]){
+				seguimientoGenes->compararGenes(juego[fila][columna]->obtenerGenes().obtenerGenes());
 			}
 		}
 	}
-	this->envejecerBaseGenetica();
+
+	seguimientoGenes->finalizarAcumulacion();
 
 	turno++;
 
@@ -316,7 +326,7 @@ void Tablero::obtenerDatos(std::string path){
 			entrada >> auxiliar;
 			InformacionGenetica genActual(gen, intensidad);
 			if(!this->baseGenetica->estaEnLista(genActual)){
-				this->baseGenetica->push(genActual);
+				this->baseGenetica->insertar(genActual);
 			}
 			genes.insertar(genActual);
 		}
@@ -352,7 +362,30 @@ void Tablero::inicializarTablero(int cantFilas, int cantColumnas){
 	nacimientos = 0;
 	totalMuertes = 0;
 	totalNacimientos = 0;
-	turno = 1;
+	turno = 0;
 }
+
+unsigned int Tablero::obtenerTurno(){
+	return turno;
+}
+
+bool Tablero::seguimientoVacio(){
+	return seguimientoGenes->estaVacia();
+}
+
+void Tablero::seguirGen(string gen){
+	seguimientoGenes->insertar(gen, turno);
+}
+
+void Tablero::dejarDeSeguirGen(string gen){
+	seguimientoGenes->detenerSeguimiento(gen);
+}
+
+bool Tablero::buscarGen(string gen){
+	return seguimientoGenes->buscarGen(gen);
+}
+
+
+
 
 

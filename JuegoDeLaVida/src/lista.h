@@ -189,6 +189,12 @@ public:
 	 void inicializarCursor();
 
 	 /*
+	  * Post: Devuelve si el cursor
+	  * se encuentra en el final de la lista
+	  */
+	 bool finDeLaLista();
+
+	 /*
 	  * Pre: El cursor no debe apuntar a NULL
 	  * Post: Obtiene el valor guardado
 	  * en el cursor
@@ -416,6 +422,11 @@ bool Lista<Type>::estaEnLista(Type elemento){
 	return (cursor && *this->obtenerCursor() == elemento);
 }
 
+template <class Type>
+bool Lista<Type>::finDeLaLista(){
+
+	return !cursor;
+}
 
 /*
  * Metodos privados

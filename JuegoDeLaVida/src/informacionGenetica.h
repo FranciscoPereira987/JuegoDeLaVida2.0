@@ -40,6 +40,7 @@ public:
 	información dada por un bit: 0.
 	*/
 	InformacionGenetica();
+
 	/* post : indica si la instancia y 'otra'
 	* representan la misma secuencia de
 	* bits, es decir si son iguales.

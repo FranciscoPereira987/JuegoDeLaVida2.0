@@ -20,8 +20,11 @@
 #ifndef STRING
 #define STRING
 #include <string>
+
 using std::string;
 #endif
+
+#include "listaSeguimiento.h"
 
 typedef unsigned int uint;
 
@@ -48,6 +51,8 @@ private:
 	Lista<InformacionGenetica>* baseGenetica;
 
 	Celula*** juego;
+
+	ListaSeguimiento* seguimientoGenes;
 
 	/*
 	 * Pre: La cantidad de filas y columnas debe ser
@@ -135,12 +140,6 @@ private:
 	 */
 	float calcularPromedio(unsigned int total,unsigned int turnos);
 
-	/*
-	 * Pre : base genetica cargada
-	 * Post: aumenta la edad de cada gen en la base genetica.
-	 */
-	void envejecerBaseGenetica();
-
 public:
 
 	/*
@@ -194,6 +193,43 @@ public:
 	 */
 	void estadoDelJuego();
 
+	/*
+	 * post:devuelve el turno acutal
+	 */
+	unsigned int obtenerTurno();
+
+	/*
+	 * pre: el gen tiene que existir en el tablero
+	 * post: agrega el gen a la lista de seguimiento
+	 */
+	void seguirGen(string gen);
+
+	/*
+	 * pre: el gen tiene que estar en la lista de seguimiento
+	 * post: devuelve la informacion acumulada del gen
+	 */
+	void dejarDeSeguirGen(string gen);
+
+	/*
+	 * pre: el gen debe estar existir en el tablero
+	 * post: busca el gen en la lista de seguimiento
+	 */
+	bool buscarGen(string gen);
+
+	/*
+	 * post: devuelve si no hay ningun gen en la lista de seguimiento
+	 */
+	bool seguimientoVacio();
+
+	/*
+	 * Post: Imprime la base de genes del tablero
+	 */
+	void imprimirBaseGenetica();
+
+	/*
+	 * Post: Devuelve si un gen esta en la base genetica
+	 */
+	bool genValido(string gen);
 };
 
 
