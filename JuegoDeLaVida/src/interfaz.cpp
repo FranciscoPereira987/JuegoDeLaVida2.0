@@ -124,10 +124,12 @@ void Juego::DesarrolloDelJuego(Tablero* partida){
 
 	do{
 		partida->imprimirTablero();
-		partida->actualizar();
+
 
 		this->mostrarOpciones();
 		this->modificarSeguimiento(partida);
+
+		partida->actualizar();
 
 	}while(var == 1);
 

@@ -18,7 +18,7 @@ using std::endl;
 int main(){
 	try{
 		Juego partida;
-		string path = "celulas/prueba";
+		string path = "celulas/infoTablero.txt";
 
 		partida.iniciarPartida(path);
 
