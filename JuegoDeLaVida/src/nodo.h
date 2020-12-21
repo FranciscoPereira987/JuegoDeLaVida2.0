@@ -107,7 +107,7 @@ void Nodo<Type>::setValue(Type valor){
 	if(!llave){
 		llave = new Type;
 	}
-	llave = valor;
+	*llave = valor;
 }
 
 
