@@ -180,7 +180,7 @@ public:
 	 * a la derecha, si la posicion
 	 * es la ultima, devuelve NULL
 	 */
-	 void avanzarCursor();
+	 bool avanzarCursor();
 
 	 /*
 	 * Post: Dirije el cursor al
@@ -251,9 +251,8 @@ Lista<Type>::Lista(Lista<Type>& otra){
 template <class Type>
 Lista<Type>::~Lista(){
 
-	if(head){
-		liberar(head);
-		head = NULL;
+	while(head){
+		this->eliminarPrimero();
 	}
 
 
@@ -487,13 +486,15 @@ void Lista<Type>::inicializarCursor(){
 }
 
 template <class Type>
-void Lista<Type>::avanzarCursor(){
+bool Lista<Type>::avanzarCursor(){
 
 	if(!(cursor)){
 		throw string("CURSOR EN POSICION INVALIDA");
 	}
 
 	cursor = cursor->getNext();
+
+	return (cursor);
 
 }
 

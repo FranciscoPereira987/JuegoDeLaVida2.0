@@ -37,7 +37,9 @@ void Juego::DesarrolloDelJuego(Tablero* partida){
 		std::cout << "(4) Terminar" << std::endl;
 
 		this->pedirEleccion();
-		partida->actualizar();
+		if(var == 1){
+			partida->actualizar();
+		}
 
 	}while(var == 1);
 

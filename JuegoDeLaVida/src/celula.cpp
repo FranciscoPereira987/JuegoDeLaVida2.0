@@ -8,7 +8,7 @@
 #include "celula.h"
 
 
-Celula::Celula(Lista<InformacionGenetica> genesPadre){
+Celula::Celula(Lista<InformacionGenetica*> genesPadre){
 
 	estado = VIVA;
 
@@ -52,7 +52,7 @@ bool Celula::obtenerCambio(){
 
 
 void Celula::decidirEstado(int nrTurno,
-		Lista<InformacionGenetica>* baseGenetica){
+		Lista<InformacionGenetica*>* baseGenetica){
 
 	aplicarReglas(nrTurno, baseGenetica);
 	resetearPuntaje();
@@ -79,7 +79,7 @@ void Celula::resetearPuntaje(){
 }
 
 void Celula::aplicarReglas(int nrTurno,
-		Lista<InformacionGenetica>* baseGenetica){
+		Lista<InformacionGenetica*>* baseGenetica){
 	int puntaje = genes->obtenerProgenitores();
 
     if(estado){
@@ -94,7 +94,7 @@ void Celula::aplicarReglas(int nrTurno,
     }
 }
 
-void Celula::nacer(int nrTurno, Lista<InformacionGenetica>* baseGenetica){
+void Celula::nacer(int nrTurno, Lista<InformacionGenetica*>* baseGenetica){
 
 	estado = VIVA;
 
@@ -103,7 +103,7 @@ void Celula::nacer(int nrTurno, Lista<InformacionGenetica>* baseGenetica){
 }
 
 
-void Celula::mezclarGenes(int nrTurno, Lista<InformacionGenetica>* baseGenetica){
+void Celula::mezclarGenes(int nrTurno, Lista<InformacionGenetica*>* baseGenetica){
 
 	genes->mezclarGenes(nrTurno, baseGenetica);
 
