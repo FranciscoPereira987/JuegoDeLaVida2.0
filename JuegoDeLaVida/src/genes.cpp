@@ -273,7 +273,6 @@ void Genes::transferenciaTriple(Lista<InformacionGenetica>* cargaFinal,
 	else{
 		genesACombinar->apilar(nuevo);
 	}
-	cargaFinal->push(nuevo);
 	for (int i = 0; i < 3; i++){
 		cargaGenetica[i].remove(0);
 	}

@@ -91,6 +91,9 @@ void Celula::aplicarReglas(int nrTurno,
     if(estado){
         estado = (puntaje == 3) || (puntaje == 2);
         cambioDeEstado = !estado;
+        if(!estado){
+        	this->genes->obtenerGenes()->imprimir();
+        }
     }
     else{
         if((estado = (puntaje == 3))){

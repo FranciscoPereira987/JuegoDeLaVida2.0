@@ -75,7 +75,7 @@ void InformacionGenetica::combinarCon(InformacionGenetica* otra){
 
 bool InformacionGenetica::operator ==(InformacionGenetica otro){
 
-	return !(this->bits.compare(otro.bits));
+	return this->bits == otro.devolverBits();
 
 }
 
@@ -91,7 +91,7 @@ bool InformacionGenetica::operator >(InformacionGenetica otro){
 
 bool InformacionGenetica::operator !=(InformacionGenetica otro){
 
-	return (this->bits.compare(otro.devolverBits()));
+	return (this->bits != otro.devolverBits());
 }
 
 bool InformacionGenetica::esMasJoven(InformacionGenetica* otro){

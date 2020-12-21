@@ -30,7 +30,7 @@ Tablero::~Tablero(){
 
 	if(juego){
 		limpiarTablero();
-
+		this->baseGenetica->imprimir();
 		delete this->baseGenetica;
 	}
 
