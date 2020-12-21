@@ -228,11 +228,13 @@ void Tablero::definirTablero(){
 			if(celulaMuerta(fila, columna)){
 				limpiarCelula(fila, columna);
 			}else if(juego[fila][columna]){
-				seguimientoGenes->compararGenes(juego[fila][columna]->obtenerGenes().obtenerGenes());
+				juego[fila][columna]->envejecerGenes();
+				seguimientoGenes->compararGenes(
+						juego[fila][columna]->obtenerGenes().obtenerGenes());
 			}
 		}
 	}
-
+	this->envejecerBaseGenetica();
 	seguimientoGenes->finalizarAcumulacion();
 
 	turno++;
@@ -363,6 +365,12 @@ void Tablero::inicializarTablero(int cantFilas, int cantColumnas){
 	totalMuertes = 0;
 	totalNacimientos = 0;
 	turno = 0;
+}
+
+void Tablero::envejecerBaseGenetica(){
+	for(int i=0; i < baseGenetica->longitud(); i++ ){
+		(*baseGenetica)[i].envejecer();
+	}
 }
 
 unsigned int Tablero::obtenerTurno(){
