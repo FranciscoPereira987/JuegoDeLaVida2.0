@@ -20,7 +20,7 @@ template <class Type> class Nodo{
 
 private:
 
-	Type llave;
+	Type* llave;
 
 	Nodo* siguiente;
 
@@ -38,9 +38,19 @@ public:
 	Nodo(Type valor, Nodo<Type>* nodoSiguiente);
 
 	/*
+	 * Post: Libera la memoria ocupada por el nodo
+	 */
+	~Nodo();
+
+	/*
 	 * Post: Devuelve el valor del Nodo
 	 */
 	Type getValue();
+
+	/*
+	 * Post: Devuelve un puntero a la llave
+	 */
+	Type* getValuePointer();
 
 	/*
 	 * Post: Devuelve un puntero a siguiente
@@ -65,7 +75,7 @@ Nodo<Type>::Nodo(Type valor){
 
 	siguiente = NULL;
 
-	llave = valor;
+	llave = new Type(valor);
 
 }
 
@@ -74,8 +84,15 @@ Nodo<Type>::Nodo(Type valor, Nodo<Type>* nodoSiguiente){
 
 	siguiente = nodoSiguiente;
 
-	llave = valor;
+	llave = new Type(valor);
 
+}
+
+template <class Type>
+Nodo<Type>::~Nodo(){
+	if(llave){
+		delete llave;
+	}
 }
 
 template <class Type>
@@ -87,7 +104,9 @@ void Nodo<Type>::setNext(Nodo<Type>* nuevoSiguiente){
 
 template <class Type>
 void Nodo<Type>::setValue(Type valor){
-
+	if(!llave){
+		llave = new Type;
+	}
 	llave = valor;
 }
 
@@ -95,7 +114,14 @@ void Nodo<Type>::setValue(Type valor){
 template <class Type>
 Type Nodo<Type>::getValue(){
 
+	return *llave;
+}
+
+template <class Type>
+Type* Nodo<Type>::getValuePointer(){
+
 	return llave;
+
 }
 
 template <class Type>

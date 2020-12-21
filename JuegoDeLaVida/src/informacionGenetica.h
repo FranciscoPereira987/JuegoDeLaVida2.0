@@ -46,6 +46,9 @@ public:
 	*/
 	bool esIgualA(InformacionGenetica* otra);
 
+	/*
+	 * Post: Agrega al stream los bits del gen
+	 */
 	friend std::ostream& operator<<(std::ostream& o, InformacionGenetica const& gen);
 
 	/* post: combina la secuencia de bits de la

@@ -173,7 +173,7 @@ public:
 	 * (a el nodo de esa posicion)
 	 *
 	 */
-	 Type operator[](int posicion);
+	 Type& operator[](int posicion);
 
 	 /*
 	 * Post: Mueve el cursor
@@ -353,7 +353,7 @@ unsigned int Lista<Type>::longitud(){
 }
 
 template <class Type>
-Type Lista<Type>::operator[](int posicion){
+Type& Lista<Type>::operator[](int posicion){
 
 	if(!posicionValida(posicion)){
 		throw string("POSICION INVALIDA");
@@ -361,7 +361,7 @@ Type Lista<Type>::operator[](int posicion){
 
 	moverCursor(posicion);
 
-	return (this->cursor->getValue());
+	return *(this->cursor->getValuePointer());
 
 }
 

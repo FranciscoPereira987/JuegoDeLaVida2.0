@@ -28,7 +28,7 @@ void Juego::DesarrolloDelJuego(Tablero* partida){
 
 	do{
 		partida->imprimirTablero();
-		partida->actualizar();
+
 
 		std::cout << std::endl << "Para continuar, ingrese:" << std::endl;
 		std::cout << "(1) Siguiente turno." << std::endl;
@@ -37,6 +37,7 @@ void Juego::DesarrolloDelJuego(Tablero* partida){
 		std::cout << "(4) Terminar" << std::endl;
 
 		this->pedirEleccion();
+		partida->actualizar();
 
 	}while(var == 1);
 
