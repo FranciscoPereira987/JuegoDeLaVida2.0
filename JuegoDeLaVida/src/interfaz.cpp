@@ -37,7 +37,7 @@ void Juego::mostrarOpciones(){
 	std::cin >> var;
 
 }
-void Juego::agregarSeguimiento(Tablero* partida){1000000111
+void Juego::agregarSeguimiento(Tablero* partida){
 	 string gen;
 	 std::cout << "Ingrese el gen a seguir." << std::endl;
 	 std::cin >> gen;
