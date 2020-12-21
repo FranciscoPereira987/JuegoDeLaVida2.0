@@ -135,6 +135,11 @@ private:
 	 */
 	float calcularPromedio(unsigned int total,unsigned int turnos);
 
+	/*
+	 * Pre : base genetica cargada
+	 * Post: aumenta la edad de cada gen en la base genetica.
+	 */
+	void envejecerBaseGenetica();
 
 public:
 

@@ -98,7 +98,7 @@ void Tablero::estadoDelJuego(){
 
 
 void Tablero::actualizar(){
-
+	envejecerBaseGenetica();
 	for(int fila = 0; fila < filas; fila++){
 		for(int columna = 0; columna < columnas; columna++){
 			if(juego[fila][columna] &&
@@ -114,6 +114,13 @@ void Tablero::actualizar(){
 /*
  * Metodos privados
  */
+
+void Tablero::envejecerBaseGenetica(){
+	for(int i=0; i < baseGenetica->longitud(); i++ ){
+		(*baseGenetica)[i].envejecer();
+	}
+}
+
 
 void Tablero::limpiarCelula(int fila, int columna){
 
