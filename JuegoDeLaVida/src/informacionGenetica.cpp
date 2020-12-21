@@ -80,13 +80,28 @@ bool InformacionGenetica::operator ==(InformacionGenetica otro){
 }
 
 bool InformacionGenetica::operator <(InformacionGenetica otro){
+	bool resultado = this->contarBits() == otro.contarBits();
+	if(resultado){
+		resultado = (this->devolverBits() < otro.devolverBits());
+	}
+	else{
+		resultado = (this->contarBits() < otro.contarBits());
+	}
 
-	return (this->bits.compare(otro.bits) < 0);
+
+	return resultado;
 }
 
 bool InformacionGenetica::operator >(InformacionGenetica otro){
+	bool resultado = this->contarBits() == otro.contarBits();
+	if(resultado){
+		resultado = (this->devolverBits() > otro.devolverBits());
+	}
+	else{
+		resultado = (this->contarBits() > otro.contarBits());
+	}
 
-	return (this->bits.compare(otro.bits) > 0);
+	return resultado;
 }
 
 bool InformacionGenetica::operator !=(InformacionGenetica otro){

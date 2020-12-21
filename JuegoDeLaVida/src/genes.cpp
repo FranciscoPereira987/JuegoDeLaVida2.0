@@ -232,7 +232,7 @@ void Genes::transferenciaDoble(int primero, int segundo,
 	}
 	InformacionGenetica nuevo(gen1.devolverBits(), intensidad);
 	if(intensidad){
-		cargaFinal->push(nuevo);
+		cargaFinal->insertar(nuevo);
 	}
 	else{
 		genesACombinar->apilar(nuevo);
@@ -268,7 +268,7 @@ void Genes::transferenciaTriple(Lista<InformacionGenetica>* cargaFinal,
 
 	InformacionGenetica nuevo(gen1.devolverBits(), intensidad);
 	if(intensidad){
-		cargaFinal->push(nuevo);
+		cargaFinal->insertar(nuevo);
 	}
 	else{
 		genesACombinar->apilar(nuevo);
