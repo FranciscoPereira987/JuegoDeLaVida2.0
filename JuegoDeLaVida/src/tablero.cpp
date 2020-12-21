@@ -30,14 +30,14 @@ Tablero::~Tablero(){
 
 	if(juego){
 		limpiarTablero();
-		this->baseGenetica->imprimir();
+
 		delete this->baseGenetica;
 	}
 
 }
 
 void Tablero::agregarCelula(int fila, int columna\
-		, Lista<InformacionGenetica*> genes){
+		, Lista<InformacionGenetica> genes){
 
 	if(posicionValida(fila, columna)){
 		juego[fila][columna] = new Celula(genes);
@@ -117,7 +117,7 @@ void Tablero::actualizar(){
 
 void Tablero::envejecerBaseGenetica(){
 	for(int i=0; i < baseGenetica->longitud(); i++ ){
-		(*baseGenetica)[i]->envejecer();
+		(*baseGenetica)[i].envejecer();
 	}
 }
 
@@ -218,8 +218,12 @@ void Tablero::definirTablero(){
 			if(celulaMuerta(fila, columna)){
 				limpiarCelula(fila, columna);
 			}
+			else if(juego[fila][columna]){
+				juego[fila][columna]->envejecerGenes();
+			}
 		}
 	}
+	this->envejecerBaseGenetica();
 
 	turno++;
 
@@ -302,7 +306,7 @@ void Tablero::obtenerDatos(std::string path){
 
 		string gen;
 		int intensidad;
-		Lista<InformacionGenetica*> genes;
+		Lista<InformacionGenetica> genes;
 		entrada >> auxiliar;
 
 		while (auxiliar == "gen"){
@@ -311,10 +315,10 @@ void Tablero::obtenerDatos(std::string path){
 			entrada >> intensidad;
 			entrada >> auxiliar;
 			InformacionGenetica genActual(gen, intensidad);
-			if(!this->baseGenetica->estaEnLista(&genActual)){
-				this->baseGenetica->push(&genActual);
+			if(!this->baseGenetica->estaEnLista(genActual)){
+				this->baseGenetica->push(genActual);
 			}
-			genes.insertar(&genActual);
+			genes.insertar(genActual);
 		}
 		entrada >> auxiliar;
 
@@ -338,7 +342,7 @@ void Tablero::inicializarTablero(int cantFilas, int cantColumnas){
 	filas = cantFilas;
 	columnas = cantColumnas;
 	juego = new Celula**[filas];
-	this->baseGenetica = new Lista<InformacionGenetica*>;
+	this->baseGenetica = new Lista<InformacionGenetica>;
 	for(int fila = 0; fila < filas; fila++){
 		juego[fila] = new Celula*[columnas];
 		inicializarFila(juego[fila]);

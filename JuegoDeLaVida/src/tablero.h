@@ -45,7 +45,7 @@ private:
 
 	unsigned int turno;
 
-	Lista<InformacionGenetica*>* baseGenetica;
+	Lista<InformacionGenetica>* baseGenetica;
 
 	Celula*** juego;
 
@@ -170,7 +170,7 @@ public:
 	 * esa posicion con los genes pasados
 	 * como parametros
 	 */
-	void agregarCelula(int nrFila, int nrColumna, Lista<InformacionGenetica*> genes);
+	void agregarCelula(int nrFila, int nrColumna, Lista<InformacionGenetica> genes);
 
 	/*
 	 * Pre: ---

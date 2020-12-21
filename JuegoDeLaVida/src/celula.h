@@ -35,7 +35,7 @@ private:
 	 * Post: aplica las reglas del
 	 * juego de la vida a la celula
 	 */
-	void aplicarReglas(int nrTurno, Lista<InformacionGenetica*>* baseGenetica);
+	void aplicarReglas(int nrTurno, Lista<InformacionGenetica>* baseGenetica);
 
 	/*
 	 * Post: pone el puntaje de la celula
@@ -47,13 +47,13 @@ private:
 	 * Pre: La celula tiene que tener 3 padres
 	 * Post: nace la celula
 	 */
-	void nacer(int nrTurno, Lista<InformacionGenetica*>* baseGenetica);
+	void nacer(int nrTurno, Lista<InformacionGenetica>* baseGenetica);
 
 	/*
 	 * Pre: La celula debe tener tres padres
 	 * Post: Se realiza la mezcla de genes
 	 */
-	void mezclarGenes(int nrTurno, Lista<InformacionGenetica*>* baseGenetica);
+	void mezclarGenes(int nrTurno, Lista<InformacionGenetica>* baseGenetica);
 
 public:
 
@@ -69,7 +69,7 @@ public:
 	 * post: Se crea una celula viva
 	 * con la carga genetica deseada
 	 */
-	Celula(Lista<InformacionGenetica*> cargaGenetica);
+	Celula(Lista<InformacionGenetica> cargaGenetica);
 
 	/*
 	 * Post: ---
@@ -113,7 +113,7 @@ public:
 	 * su puntaje
 	 */
 	void decidirEstado(int nrTurno,
-			Lista<InformacionGenetica*>* baseGenetica);
+			Lista<InformacionGenetica>* baseGenetica);
 
 	/*
 	 * Pre: La celula debe estar viva
@@ -121,6 +121,11 @@ public:
 	 * celula
 	 */
 	Genes obtenerGenes();
+
+	/*
+	 * Post: Envejece los genes de la celula
+	 */
+	void envejecerGenes();
 
 };
 

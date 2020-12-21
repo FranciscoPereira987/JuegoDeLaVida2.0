@@ -193,7 +193,7 @@ public:
 	  * Post: Obtiene el valor guardado
 	  * en el cursor
 	  */
-	 Type obtenerCursor();
+	 Type* obtenerCursor();
 
 	 /*
 	  * Post: Hace que mi lista sea igual
@@ -388,9 +388,9 @@ void Lista<Type>::insertar(Type valor){
 }
 
 template <class Type>
-Type Lista<Type>::obtenerCursor(){
+Type* Lista<Type>::obtenerCursor(){
 
-	return cursor->getValue();
+	return cursor->getValuePointer();
 }
 
 template <class Type>
@@ -408,12 +408,12 @@ bool Lista<Type>::estaEnLista(Type elemento){
 
 	this->inicializarCursor();
 	while(this->cursor &&
-			this->obtenerCursor() != elemento){
+			*this->obtenerCursor() != elemento){
 		this->avanzarCursor();
 	}
 
 
-	return (cursor && this->obtenerCursor() == elemento);
+	return (cursor && *this->obtenerCursor() == elemento);
 }
 
 
@@ -515,10 +515,10 @@ void Lista<Type>::copiarLista(Lista<Type>& otra){
 
 	otra.inicializarCursor();
 		while(otra.cursor->getNext()){
-			push(otra.obtenerCursor());
+			push(*otra.obtenerCursor());
 			otra.avanzarCursor();
 		}
-		push(otra.obtenerCursor());
+		push(*otra.obtenerCursor());
 }
 
 

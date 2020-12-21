@@ -55,6 +55,15 @@ void Genes::agregarProgenitor(Genes progenitor){
 
 }
 
+void Genes::envejecerGenes(){
+
+	this->cargaGenetica->inicializarCursor();
+	while(this->cargaGenetica->avanzarCursor()){
+		this->cargaGenetica->obtenerCursor()->envejecer();
+	}
+
+}
+
 int Genes::obtenerProgenitores(){
 
 	return progenitores;
@@ -300,7 +309,7 @@ void Genes::revisarGen(InformacionGenetica genARevisar,
 			 * carga final, entonces le cambio su edad
 			 * por la correcta y lo inserto en la carga
 			 */
-			int edad = baseGenetica->obtenerCursor().obtenerEdad();
+			int edad = baseGenetica->obtenerCursor()->obtenerEdad();
 			genARevisar.cambiarEdad(edad);
 			cargaFinal->insertar(genARevisar);
 		}
