@@ -14,6 +14,7 @@
 #include "lista.h"
 #include "EasyBMP.h"
 #include "EasyBMP_Geometry.h"
+#include "EasyBMP_Font.h"
 
 
 using std::string;
@@ -32,7 +33,8 @@ private:
 	/*
 	 * Post: Genera el grafico al finalizar el seguimiento de un gen
 	 */
-	BMP* crearGrafico();
+	BMP* crearGrafico(unsigned int cantidadTurnos, unsigned int maxAltura,
+			int turnoInicial);
 
 
 public:

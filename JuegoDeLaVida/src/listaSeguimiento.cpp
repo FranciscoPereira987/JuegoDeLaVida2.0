@@ -91,7 +91,8 @@ void ListaSeguimiento::finalizarAcumulacion(){
 	}
 }
 
-BMP* ListaSeguimiento::crearGrafico(){
+BMP* ListaSeguimiento::crearGrafico(unsigned int cantidadTurnos,
+		unsigned int maximaAltura, int turnoInicial){
 
 	BMP* grafico;
 
@@ -107,8 +108,41 @@ BMP* ListaSeguimiento::crearGrafico(){
 	negro.Blue = 0;
 	negro.Alpha = 1;
 
+	RGBApixel gris;
+
+	gris.Red = 178;
+	gris.Green = 186;
+	gris.Blue = 187;
+	gris.Alpha = 0;
+
+
+	int posicionVariable;
+	for(int turno = 0; turno < cantidadTurnos; turno++){
+		posicionVariable = turno * (1000/ cantidadTurnos) + 50;
+		char* numero = (char*) std::to_string(turno + turnoInicial).c_str();
+		PrintString(*grafico,  numero,
+				posicionVariable, grafico->TellHeight() - 45, 10, negro);
+		DrawAALine(*grafico, posicionVariable, 4950, posicionVariable, 10, gris);
+	}
+	if(!maximaAltura){
+		maximaAltura = 11;
+	}
+	cout << maximaAltura << endl;
+	for(int intensidad = (maximaAltura/10); intensidad <= maximaAltura;
+			intensidad += (maximaAltura/10)){
+		posicionVariable = 1050 - intensidad * (1000 / maximaAltura);
+
+		char* valor = (char*) std::to_string(intensidad).c_str();
+
+		PrintString(*grafico, valor, 10, posicionVariable, 10, negro);
+
+		DrawAALine(*grafico, 50, posicionVariable, 4950, posicionVariable, gris);
+	}
+
 	DrawAALine(*grafico,50, 10, 50, grafico->TellHeight() - 50, negro);
-	DrawAALine(*grafico,50, grafico->TellHeight() - 50, grafico->TellWidth() - 50, grafico->TellHeight() - 50, negro);
+	DrawAALine(*grafico,50, grafico->TellHeight() - 50, grafico->TellWidth() - 50,
+			grafico->TellHeight() - 50, negro);
+
 
 	return grafico;
 }
@@ -167,7 +201,8 @@ void ListaSeguimiento::detenerSeguimiento(string gen){
 		unsigned int maximaAltura = this->seguimientos->obtenerCursor()\
 				->obtenerMaximaIntesidad();
 
-		BMP *grafico = crearGrafico();
+		BMP *grafico = crearGrafico(longitudCola, maximaAltura,
+				this->obtenerTurno());
 
 		RGBApixel rojo;
 			rojo.Red = 255;
@@ -181,16 +216,17 @@ void ListaSeguimiento::detenerSeguimiento(string gen){
 
 		nombreDelGrafico += std::to_string(turnos) + "-";
 
-
-
-		unsigned int coordXanterior = 50;
-		unsigned int coordYanterior = grafico->TellHeight() - 50 - this->obtenerIntensidad()*0.5;
-
 		unsigned int pasoX = 1000 / longitudCola;
 		unsigned int pendienteY = 1;
 		if(maximaAltura){
 			pendienteY = (1000) / maximaAltura;
 		}
+
+		unsigned int coordXanterior = 50;
+		unsigned int coordYanterior = grafico->TellHeight() - 50 - \
+				this->obtenerIntensidad()* pendienteY;
+
+
 
 
 		while(!this->colaVacia()){

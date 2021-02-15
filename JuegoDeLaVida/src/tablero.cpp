@@ -109,13 +109,15 @@ void Tablero::dibujarLineasSeparadoras(unsigned int anchoX, unsigned int anchoY,
 	colorLineas.Blue = 0;
 	colorLineas.Alpha = 0;
 
-	for(unsigned int fila = 0; fila < this->filas; fila++){
+	for(unsigned int fila = 0; fila <= this->filas; fila++){
 
-		DrawLine(*imagen, 0, fila*anchoY, 5000, fila*anchoY, colorLineas);
+		DrawLine(*imagen, 0, fila*anchoY, this->columnas * anchoX,
+				fila*anchoY, colorLineas);
 
 	}
-	for(unsigned int columna = 0; columna < this->columnas; columna++){
-		DrawLine(*imagen, columna * anchoX, 0, columna * anchoX, 5000, colorLineas);
+	for(unsigned int columna = 0; columna <= this->columnas; columna++){
+		DrawLine(*imagen, columna * anchoX, 0, columna * anchoX,
+				this->filas * anchoY, colorLineas);
 	}
 
 }
@@ -123,10 +125,12 @@ void Tablero::dibujarLineasSeparadoras(unsigned int anchoX, unsigned int anchoY,
 void Tablero::imprimirTablero(){
 	BMP* tablero = new BMP;
 
-	tablero->SetSize(5000, 5000);
+	tablero->SetSize(this->filas * 5,this->columnas * 5);
 
-	unsigned int anchoX = 5000 / columnas;
-	unsigned int anchoY = 5000 / filas;
+
+
+	unsigned int anchoX = 5;
+	unsigned int anchoY = 5;
 
 	string numeroIdentificador = "00000000";
 	numeroIdentificador.insert(numeroIdentificador.length() - (1 + turno/10),
