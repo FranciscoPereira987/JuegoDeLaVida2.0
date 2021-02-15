@@ -127,7 +127,7 @@ BMP* ListaSeguimiento::crearGrafico(unsigned int cantidadTurnos,
 	if(!maximaAltura){
 		maximaAltura = 11;
 	}
-	cout << maximaAltura << endl;
+
 	for(int intensidad = (maximaAltura/10); intensidad <= maximaAltura;
 			intensidad += (maximaAltura/10)){
 		posicionVariable = 1050 - intensidad * (1000 / maximaAltura);
