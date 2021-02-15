@@ -1,4 +1,4 @@
-tablero 20 80
+tablero 80 80
 celula 10 30
 gen 1000100010001111000001 20
 gen 10001001010101011110010001 80
@@ -20,4 +20,65 @@ celula 10 31
 gen 1000100010001111000001 30
 gen 10001001010101011110010001 90
 gen 1001111 10
+fin
+celula 40 70
+gen 101010 50
+gen 1101 30
+gen 0 90
+fin
+celula 41 70
+gen 111 60
+gen 101 50
+fin
+celula 42 70
+gen 110 40
+fin
+celula 41 69
+gen 10110 50
+gen 111 30
+fin
+celula 40 71
+gen 10 40
+gen 1 30
+fin
+celula 25 60
+gen 0 70
+gen 101 9
+fin
+celula 26 61
+gen 110 89
+gen 100 40
+fin
+celula 25 62
+gen 1011 60
+fin
+celula 26 63
+gen 1 50
+gen 10 45
+gen 1011 2
+fin
+celula 25 64
+gen 110 65
+gen 100 70
+fin
+celula 26 65
+gen 11001 10
+gen 11011 40
+fin
+celula 25 66
+gen 101 60
+fin
+celula 26 67
+gen 11001 78
+gen 0 90
+gen 10101 67
+fin
+celula 25 68
+gen 0 76
+gen 1 56
+fin
+celula 26 69
+gen 101 65
+gen 111 67
+gen 100 45
 fin

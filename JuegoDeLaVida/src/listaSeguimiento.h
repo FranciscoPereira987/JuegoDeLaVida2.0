@@ -11,6 +11,10 @@
 #include <iostream>
 #include <string>
 #include "nodoGenes.h"
+#include "lista.h"
+#include "EasyBMP.h"
+#include "EasyBMP_Geometry.h"
+
 
 using std::string;
 
@@ -18,14 +22,7 @@ class ListaSeguimiento{
 
 private:
 
-	NodoGen* cursor;
-
-	NodoGen* primerElemento;
-
-	/*
-	 * remueve el primer elemento de la lista
-	 */
-	void removerElemento();
+	Lista<NodoGen>* seguimientos;
 
 	/*
 	 * post: devuelve si no hay mas intensidades en la cola
@@ -33,11 +30,9 @@ private:
 	bool colaVacia();
 
 	/*
-	 * pre: la lista no debe estar vacia
-	 * post: mueve el cursor al siguiente elemento
+	 * Post: Genera el grafico al finalizar el seguimiento de un gen
 	 */
-	void avanzarCursor();
-
+	BMP* crearGrafico();
 
 
 public:

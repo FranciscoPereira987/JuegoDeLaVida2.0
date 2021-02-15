@@ -44,9 +44,24 @@ public:
 	NodoGen(string genASeguir, unsigned int turno);
 
 	/*
+	 * Post: Crea un nodo en base a otro
+	 */
+	NodoGen(const NodoGen &otro);
+
+	/*
 	 * post: devuelve el gen
 	 */
 	string obtenerGen();
+
+	/*
+	 * Post: Devuelve la cantidad de elementos acolados
+	 */
+	unsigned int obtenerLongitudCola();
+
+	/*
+	 * Post: Devuelve la intesidad maxima acolada
+	 */
+	unsigned int obtenerMaximaIntesidad();
 
 	/*
 	 * post: devuelve el turno en que se comenzo a seguir
@@ -88,6 +103,9 @@ public:
 	void cambiarSiguiente(NodoGen* nuevoSiguiente);
 
 	bool operator==(InformacionGenetica gen);
+
+	bool operator!=(NodoGen otroValor);
+	bool operator==(NodoGen otroValor);
 
 	bool buscarGen(Lista<InformacionGenetica>* gen);
 

@@ -20,12 +20,32 @@ NodoGen::NodoGen(string genASeguir, unsigned int turno){
 	siguiente = NULL;
 }
 
+NodoGen::NodoGen(const NodoGen &otro){
+
+	this->gen = otro.gen;
+	this->intensidad = otro.intensidad;
+	this->primerTurno = otro.primerTurno;
+	this->intensidadesAcumuladas = new Cola(*otro.intensidadesAcumuladas);
+	this->siguiente = otro.siguiente;
+
+}
+
 string NodoGen::obtenerGen(){
 	return gen;
 }
 
 unsigned int NodoGen::obtenerTurno(){
 	return primerTurno;
+}
+
+unsigned int NodoGen::obtenerLongitudCola(){
+
+	return this->intensidadesAcumuladas->obtenerLongitud();
+}
+
+unsigned int NodoGen::obtenerMaximaIntesidad(){
+
+	return this->intensidadesAcumuladas->obtenerMaximo();
 }
 
 bool NodoGen::estaVacia(){
@@ -55,6 +75,18 @@ void NodoGen::cambiarSiguiente(NodoGen* nuevoSiguiente){
 
 bool NodoGen::operator==(InformacionGenetica genetica){
 	return (genetica.devolverBits() == this->gen);
+}
+
+bool NodoGen::operator ==(NodoGen otroValor){
+
+	return (this->obtenerGen() == otroValor.obtenerGen());
+
+}
+
+bool NodoGen::operator !=(NodoGen otroValor){
+
+
+	return !(this->operator ==(otroValor));
 }
 
 bool NodoGen::buscarGen(Lista<InformacionGenetica>* gen){

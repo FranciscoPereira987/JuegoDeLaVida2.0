@@ -22,16 +22,6 @@ int main(){
 
 		partida.iniciarPartida(path);
 
-		/*
-		Lista<int> nuevaLista(0);
-
-		nuevaLista.append(2);
-
-		nuevaLista[0] = 1;
-
-		nuevaLista.imprimir();
-		*/
-
 	}catch(string& excepcion){
 
 		cout << excepcion << endl;

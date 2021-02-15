@@ -50,21 +50,111 @@ void Tablero::agregarCelula(int fila, int columna\
 
 }
 
+void Tablero::dibujarCelula(unsigned int inicioX, unsigned int inicioY,
+		unsigned int finX, unsigned int finY, RGBApixel color, BMP* imagen){
+
+	for(int posY = inicioY; posY < finY; posY++){
+		for(int posX = inicioX; posX < finX; posX++){
+			imagen->SetPixel(posX, posY, color);
+		}
+	}
+
+}
+
+void Tablero::dibujarCelulaViva(unsigned int x, unsigned int y,
+		unsigned int anchoX, unsigned int anchoY, BMP* imagen){
+
+	RGBApixel verde;
+
+	verde.Blue = 198;
+	verde.Red = 171;
+	verde.Green = 235;
+	verde.Alpha = 0;
+
+	unsigned int inicioX = 0 + x * anchoX;
+	unsigned int inicioY = y * anchoY;
+
+	unsigned int finX = inicioX + anchoX;
+	unsigned int finY = inicioY + anchoY;
+
+	this->dibujarCelula(inicioX, inicioY, finX, finY, verde, imagen);
+
+}
+
+void Tablero::dibujarCelulaMuerta(unsigned int x, unsigned int y,
+		unsigned int anchoX, unsigned int anchoY, BMP* imagen){
+	RGBApixel oscuro;
+
+	oscuro.Blue = 164;
+	oscuro.Red = 153;
+	oscuro.Green = 163;
+	oscuro.Alpha = 0;
+
+	unsigned int inicioX = 0 + x * anchoX;
+	unsigned int inicioY = y * anchoY;
+
+	unsigned int finX = inicioX + anchoX;
+	unsigned int finY = inicioY + anchoY;
+
+	this->dibujarCelula(inicioX, inicioY, finX, finY, oscuro, imagen);
+}
+
+void Tablero::dibujarLineasSeparadoras(unsigned int anchoX, unsigned int anchoY,
+		BMP* imagen){
+
+	RGBApixel colorLineas;
+
+	colorLineas.Red = 0;
+	colorLineas.Green = 0;
+	colorLineas.Blue = 0;
+	colorLineas.Alpha = 0;
+
+	for(unsigned int fila = 0; fila < this->filas; fila++){
+
+		DrawLine(*imagen, 0, fila*anchoY, 5000, fila*anchoY, colorLineas);
+
+	}
+	for(unsigned int columna = 0; columna < this->columnas; columna++){
+		DrawLine(*imagen, columna * anchoX, 0, columna * anchoX, 5000, colorLineas);
+	}
+
+}
+
 void Tablero::imprimirTablero(){
-	poblacion = 0;
-	for(int fila = 0; fila < filas; fila++){
-		for(int columna = 0; columna < columnas; columna++){
-			if(juego[fila][columna]){
-				cout << "*";
-				poblacion++;
+	BMP* tablero = new BMP;
+
+	tablero->SetSize(5000, 5000);
+
+	unsigned int anchoX = 5000 / columnas;
+	unsigned int anchoY = 5000 / filas;
+
+	string numeroIdentificador = "00000000";
+	numeroIdentificador.insert(numeroIdentificador.length() - (1 + turno/10),
+			std::to_string(turno));
+	numeroIdentificador = numeroIdentificador.substr(0,
+			numeroIdentificador.length() - (1 + turno/10));
+	string nombreArchivo = "turnos/" + numeroIdentificador + ".bmp";
+
+	for(int fila = 0; fila < this->filas; fila++){
+		for(int columna = 0; columna < this->columnas; columna++){
+
+			if(this->juego[fila][columna]){
+				this->dibujarCelulaViva(columna, fila, anchoX, anchoY, tablero);
 			}
 			else{
-				cout << " ";
+				this->dibujarCelulaMuerta(columna, fila, anchoX, anchoY, tablero);
 			}
+
 		}
-		cout << endl;
 	}
-	imprimirInfoActual();
+
+	this->dibujarLineasSeparadoras(anchoX, anchoY, tablero);
+
+	tablero->WriteToFile(nombreArchivo.c_str());
+
+	delete tablero;
+
+	this->imprimirInfoActual();
 
 }
 
@@ -263,9 +353,11 @@ void Tablero::sumarSuceso(bool estadoActual, bool cambio){
 	if((estadoActual) && (cambio)){
 		nacimientos++;
 		totalNacimientos++;
+		poblacion++;
 	}else if(!(estadoActual) && (cambio)){
 		muertes++;
 		totalMuertes++;
+		poblacion--;
 	}
 
 }
@@ -335,7 +427,8 @@ void Tablero::obtenerDatos(std::string path){
 		entrada >> auxiliar;
 
 		this->agregarCelula(fila-1, columna-1, genes);
-		//genes.~Lista();
+		poblacion++;
+
 
 		}
 

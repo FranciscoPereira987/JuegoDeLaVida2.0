@@ -14,70 +14,109 @@ using std::string;
 
 ListaSeguimiento::ListaSeguimiento(){
 
-	cursor = NULL;
-	primerElemento = NULL;
+	this->seguimientos = new Lista<NodoGen>;
 }
 
 ListaSeguimiento::ListaSeguimiento(string gen, unsigned int turno){
 
-	primerElemento = new NodoGen(gen, turno);
 
-	cursor = primerElemento;
+
+	NodoGen nuevoSeguimiento(gen, turno);
+	this->seguimientos = new Lista<NodoGen>(nuevoSeguimiento);
+
 }
 
 void ListaSeguimiento::insertar(string gen, unsigned int turno){
 
-	NodoGen* nuevoGen = new NodoGen(gen, turno);
+	NodoGen nuevoSeguimiento(gen, turno);
 
-	nuevoGen->cambiarSiguiente(primerElemento);
-
-	primerElemento = nuevoGen;
+	this->seguimientos->insertar(nuevoSeguimiento, 0);
 
 }
 
 bool ListaSeguimiento::estaVacia(){
-	return (primerElemento == NULL);
+	return (this->seguimientos->longitud() == 0);
 }
 
-void ListaSeguimiento::avanzarCursor(){
-	cursor = cursor->obtenerSiguiente();
-}
 
 bool ListaSeguimiento::colaVacia(){
-	return cursor->estaVacia();
+	return this->seguimientos->obtenerCursor()->estaVacia();
 }
 
 void ListaSeguimiento::reiniciarCursor(){
-	cursor = primerElemento;
+
+	this->seguimientos->inicializarCursor();
+
 }
 
 
 
 bool ListaSeguimiento::buscarEnLalista(Lista<InformacionGenetica>* lista){
-	return cursor->buscarGen(lista);
+
+	return this->seguimientos->obtenerCursor()->buscarGen(lista);
+
 }
 
 void ListaSeguimiento::compararGenes(Lista<InformacionGenetica>* lista){
-	this->reiniciarCursor();
-	while(cursor != NULL){
 
-		if((cursor!= NULL) &&(this->buscarEnLalista(lista))){
-			this->agregarIntensidad(lista->obtenerCursor()->obtenerIntensidad());
+	if(!this->estaVacia()){
+		bool pudoAvanzar = true;
+		this->reiniciarCursor();
+
+		while(pudoAvanzar){
+
+			if((this->buscarEnLalista(lista))){
+				this->agregarIntensidad(lista->obtenerCursor()->obtenerIntensidad());
+			}
+
+			pudoAvanzar = this->seguimientos->avanzarCursor();
 		}
-		this->avanzarCursor();
 	}
+
+
 }
 
 void ListaSeguimiento::finalizarAcumulacion(){
-	this->reiniciarCursor();
-	while(cursor != NULL){
-		this->acolarIntensidad();
-		this->avanzarCursor();
+
+	if(!this->estaVacia()){
+		bool pudoAvanzar = true;
+		this->reiniciarCursor();
+
+		while(pudoAvanzar){
+
+			this->acolarIntensidad();
+			pudoAvanzar = this->seguimientos->avanzarCursor();
+
+		}
 	}
 }
 
+BMP* ListaSeguimiento::crearGrafico(){
+
+	BMP* grafico;
+
+	grafico = new BMP;
+
+	grafico->SetSize(1100, 1100);
+
+	grafico->SetBitDepth(8);
+
+	RGBApixel negro;
+	negro.Red = 0;
+	negro.Green = 0;
+	negro.Blue = 0;
+	negro.Alpha = 1;
+
+	DrawAALine(*grafico,50, 10, 50, grafico->TellHeight() - 50, negro);
+	DrawAALine(*grafico,50, grafico->TellHeight() - 50, grafico->TellWidth() - 50, grafico->TellHeight() - 50, negro);
+
+	return grafico;
+}
+
+
+
 string ListaSeguimiento::obtenerGen(){
-	return cursor->obtenerGen();
+	return this->seguimientos->obtenerCursor()->obtenerGen();
 }
 
 bool ListaSeguimiento::buscarGen(string gen){
@@ -87,11 +126,12 @@ bool ListaSeguimiento::buscarGen(string gen){
 	bool estaEnLaLista = false;
 
 	if(!this->estaVacia()){
-		while((cursor != NULL) && (gen != this->obtenerGen())){
-			this->avanzarCursor();
+		string genActual = this->seguimientos->obtenerCursor()->obtenerGen();
+		while((gen != genActual) && this->seguimientos->avanzarCursor()){
+			genActual = this->seguimientos->obtenerCursor()->obtenerGen();
 		}
 
-		if((cursor != NULL) && (this->obtenerGen() == gen)){
+		if(genActual == gen){
 			estaEnLaLista = true;
 		}
 	}
@@ -99,54 +139,83 @@ bool ListaSeguimiento::buscarGen(string gen){
 }
 
 void ListaSeguimiento::agregarIntensidad(unsigned int intensidad){
-	cursor->sumarIntensidad(intensidad);
+	this->seguimientos->obtenerCursor()->sumarIntensidad(intensidad);
 }
 
 void ListaSeguimiento::acolarIntensidad(){
-	cursor->agregarIntensidad();
+	this->seguimientos->obtenerCursor()->agregarIntensidad();
 }
 
 unsigned int ListaSeguimiento::obtenerIntensidad(){
-	return cursor->obtenerIntensidad();
+	return this->seguimientos->obtenerCursor()->obtenerIntensidad();
 }
 
 unsigned int ListaSeguimiento::obtenerTurno(){
-	return cursor->obtenerTurno();
+	return this->seguimientos->obtenerCursor()->obtenerTurno();
 }
 
 void ListaSeguimiento::detenerSeguimiento(string gen){
 	this->reiniciarCursor();
 
+
+		string nombreDelGrafico = "seguimientos/gen-" + gen + "-";
+
 	if(this->buscarGen(gen)){
 
+		unsigned int longitudCola = this->seguimientos->obtenerCursor()\
+				->obtenerLongitudCola();
+		unsigned int maximaAltura = this->seguimientos->obtenerCursor()\
+				->obtenerMaximaIntesidad();
+
+		BMP *grafico = crearGrafico();
+
+		RGBApixel rojo;
+			rojo.Red = 255;
+			rojo.Green = 0;
+			rojo.Blue = 0;
+			rojo.Alpha = 1;
+
+
 		unsigned int turnos = this->obtenerTurno();
+		unsigned int turnoInicial = turnos;
 
-		std::cout << this->obtenerGen() << std::endl;
+		nombreDelGrafico += std::to_string(turnos) + "-";
 
-		std::cout << "Turno" << " | "  << "Intensidad acumulada" << std::endl;
+
+
+		unsigned int coordXanterior = 50;
+		unsigned int coordYanterior = grafico->TellHeight() - 50 - this->obtenerIntensidad()*0.5;
+
+		unsigned int pasoX = 1000 / longitudCola;
+		unsigned int pendienteY = 1;
+		if(maximaAltura){
+			pendienteY = (1000) / maximaAltura;
+		}
+
+
 		while(!this->colaVacia()){
-			std::cout << turnos << "  " << this->obtenerIntensidad() << std::endl;
+			int coordX = (turnos - turnoInicial + 1)*pasoX + 50;
+			int coordY = grafico->TellHeight()- 50 - pendienteY * this->obtenerIntensidad();
+			DrawAALine(*grafico, coordXanterior, coordYanterior, coordX, coordY, rojo);
+			coordXanterior = coordX;
+			coordYanterior = coordY;
 			turnos ++;
 		}
-		std::cout << std::endl;
-		if(cursor == primerElemento){
-			primerElemento = cursor->obtenerSiguiente();
-			NodoGen* actual = cursor;
-			this->reiniciarCursor();
-			delete actual;
-		}
-	}
 
+		nombreDelGrafico += std::to_string(turnos) + ".bmp";
+
+		this->seguimientos->pop(NodoGen(gen, 0));
+
+
+	grafico->WriteToFile(nombreDelGrafico.c_str());
+
+	delete grafico;
+
+	}
 }
 
 ListaSeguimiento::~ListaSeguimiento(){
-	this->reiniciarCursor();
-	NodoGen* actual;
-	while(!this->estaVacia()){
-		actual = cursor;
-		this->avanzarCursor();
-		primerElemento = cursor;
-		delete actual;
 
-	}
+	this->seguimientos->~Lista();
+
 }

@@ -21,10 +21,14 @@
 #define STRING
 #include <string>
 
+#include "EasyBMP.h"
+#include "EasyBMP_Geometry.h"
+
 using std::string;
 #endif
 
 #include "listaSeguimiento.h"
+
 
 typedef unsigned int uint;
 
@@ -145,6 +149,36 @@ private:
 	* Post: aumenta la edad de cada gen en la base genetica.
 	*/
 	void envejecerBaseGenetica();
+
+	/*
+	 * Post: Dibuja en la imagen un cuadrado que representa
+	 * a una celula, viva o muerta
+	 */
+	void dibujarCelula(unsigned int inicioX, unsigned int inicioY,
+			unsigned int finX, unsigned int finY, RGBApixel color, BMP* imagen);
+
+
+	/*
+	 * Pre: La celula debe estar viva
+	 * Post: Imprime en una imagen BMP la celula en su posicion respectiva
+	 */
+	void dibujarCelulaViva(unsigned int x, unsigned int y,
+			 unsigned int anchoX, unsigned int anchoY, BMP* imagen);
+
+	/*
+	 * Pre: La celula debe estar muerta
+	 * Post: Imprime en una imagen BMP la celula muerta en su posicion
+	 * respectiva
+	 */
+	void dibujarCelulaMuerta(unsigned int x, unsigned int y,
+			unsigned int anchoX, unsigned int anchoY, BMP* imagen);
+
+	/*
+	 * Post: Dibuja lineas que muestran la separacion de las celulas
+	 */
+	void dibujarLineasSeparadoras(unsigned int anchoX, unsigned int anchoY,
+			BMP* imagen);
+
 public:
 
 	/*

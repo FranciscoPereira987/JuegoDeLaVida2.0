@@ -17,9 +17,7 @@ enum Estado{
 	MUERTA = 0,
 	VIVA
 };
-/*
- *
- */
+
 class Celula{
 
 private:
